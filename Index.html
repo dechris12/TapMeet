@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TapMeet</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f8f9fb;
+      color: #333;
+    }
+    header {
+      background: #ff3366;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .logo {
+      height: 32px;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    nav {
+      background: #fff;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    nav button {
+      background: none;
+      border: none;
+      font-size: 14px;
+      color: #555;
+      cursor: pointer;
+      text-align: center;
+    }
+    nav button img {
+      display: block;
+      margin: 0 auto;
+      width: 28px;
+      height: 28px;
+    }
+    section {
+      display: none;
+      padding: 20px;
+      animation: fadeIn 0.4s ease;
+    }
+    section.active {
+      display: block;
+    }
+    form input, form select, form textarea {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    form button {
+      background: #ff3366;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+    }
+    .profile-card {
+      background: white;
+      padding: 15px;
+      border-radius: 12px;
+      margin: 15px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .profile-card img {
+      width: 100%;
+      border-radius: 12px;
+    }
+    .profile-card h3 {
+      margin: 10px 0 5px;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="logo.png" class="logo"> TapMeet
+</header>
+
+<nav>
+  <button onclick="showSection('login')">
+    <img src="https://cdn-icons-png.flaticon.com/512/295/295128.png">
+    Login
+  </button>
+  <button onclick="showSection('signup')">
+    <img src="https://cdn-icons-png.flaticon.com/512/1828/1828961.png">
+    Signup
+  </button>
+  <button onclick="showSection('explore')">
+    <img src="https://cdn-icons-png.flaticon.com/512/1946/1946488.png">
+    Explore
+  </button>
+  <button onclick="showSection('profile')">
+    <img src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png">
+    Profile
+  </button>
+</nav>
+
+<!-- Login Screen -->
+<section id="login" class="active">
+  <h2>Login to TapMeet</h2>
+  <form id="loginForm">
+    <input type="email" id="loginEmail" placeholder="Email" required>
+    <input type="password" id="loginPassword" placeholder="Password" required>
+    <button type="submit">Login</button>
+  </form>
+</section>
+
+<!-- Signup Screen -->
+<section id="signup">
+  <h2>Create Your Account</h2>
+  <form id="signupForm">
+    <input type="text" id="name" placeholder="Full Name" required>
+    <input type="number" id="age" placeholder="Age" required>
+    <input type="text" id="height" placeholder="Height (e.g. 5'8)" required>
+    <input type="text" id="blood" placeholder="Blood Group" required>
+    <textarea id="desc" placeholder="Write a short description" required></textarea>
+    <input type="file" id="photo" accept="image/*" required>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button type="submit">Sign Up</button>
+  </form>
+</section>
+
+<!-- Explore Screen -->
+<section id="explore">
+  <h2>Meet New People</h2>
+  <div id="profiles"></div>
+</section>
+
+<!-- Profile Screen -->
+<section id="profile">
+  <h2>My Profile</h2>
+  <div id="myProfile">Loading...</div>
+</section>
+
+<script>
+  const API_URL = "YOUR_APPS_SCRIPT_WEB_APP_URL"; // Replace with your Google Apps Script URL
+
+  function showSection(id) {
+    document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+  }
+
+  // Signup
+  document.getElementById("signupForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const file = document.getElementById("photo").files[0];
+    const reader = new FileReader();
+    reader.onloadend = async function() {
+      const data = {
+        action: "signup",
+        name: document.getElementById("name").value,
+        age: document.getElementById("age").value,
+        height: document.getElementById("height").value,
+        blood: document.getElementById("blood").value,
+        desc: document.getElementById("desc").value,
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value,
+        photo: reader.result
+      };
+      const res = await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify(data)
+      });
+      const msg = await res.text();
+      alert(msg);
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Login
+  document.getElementById("loginForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const data = {
+      action: "login",
+      email: document.getElementById("loginEmail").value,
+      password: document.getElementById("loginPassword").value
+    };
+    const res = await fetch(API_URL, {
+      method: "POST",
+      body: JSON.stringify(data)
+    });
+    const user = await res.json();
+    if (user.success) {
+      localStorage.setItem("user", JSON.stringify(user));
+      alert("Welcome " + user.name);
+      loadProfiles();
+      loadMyProfile();
+      showSection("explore");
+    } else {
+      alert("Invalid login");
+    }
+  });
+
+  async function loadProfiles() {
+    const res = await fetch(API_URL + "?action=getProfiles");
+    const users = await res.json();
+    const container = document.getElementById("profiles");
+    container.innerHTML = "";
+    users.forEach(u => {
+      container.innerHTML += `
+        <div class="profile-card">
+          <img src="${u.photo}" alt="profile">
+          <h3>${u.name}, ${u.age}</h3>
+          <p>Blood Group: ${u.blood} | Height: ${u.height}</p>
+          <p>"${u.desc}"</p>
+        </div>
+      `;
+    });
+  }
+
+  async function loadMyProfile() {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) return;
+    document.getElementById("myProfile").innerHTML = `
+      <div class="profile-card">
+        <img src="${user.photo}" alt="profile">
+        <h3>${user.name}, ${user.age}</h3>
+        <p>Blood Group: ${user.blood} | Height: ${user.height}</p>
+        <p>"${user.desc}"</p>
+      </div>
+    `;
+  }
+</script>
+
+</body>
+</html>
