@@ -7,25 +7,21 @@
     body {
       font-family: Arial, sans-serif;
       margin: 0; padding: 0;
-      background: #0a001a; /* deep purple background */
+      background: #0a001a;
       color: #eee;
-      transition: background 0.3s, color 0.3s;
     }
     header {
-      background: #4b0082; /* futuristic purple */
+      background: #4b0082;
       color: white;
       padding: 15px;
       text-align: center;
       font-size: 24px;
       font-weight: bold;
       position: sticky;
-      top: 0;
-      z-index: 1000;
+      top: 0; z-index: 1000;
       box-shadow: 0 2px 8px rgba(0,0,0,0.6);
     }
-    .logo {
-      height: 32px; vertical-align: middle; margin-right: 8px;
-    }
+    .logo { height: 32px; vertical-align: middle; margin-right: 8px; }
     nav {
       background: #120029;
       display: flex; justify-content: space-around;
@@ -43,7 +39,6 @@
     }
     section {
       display: none; padding: 20px;
-      animation: fadeIn 0.4s ease;
     }
     section.active { display: block; }
     form input, form select, form textarea {
@@ -68,6 +63,7 @@
     .profile-card img {
       width: 100%; border-radius: 12px;
     }
+    .blurred { filter: blur(8px); }
     .location-tag {
       position: absolute; top: 10px; left: 10px;
       background: rgba(0,0,0,0.6);
@@ -85,7 +81,20 @@
       border: none; padding: 10px;
       border-radius: 8px; cursor: pointer;
     }
-    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+    .explore-actions {
+      display: flex; justify-content: space-between;
+      margin-bottom: 15px;
+    }
+    .explore-actions button {
+      background: #6a0dad; border: none;
+      color: #fff; padding: 10px 15px;
+      border-radius: 8px; display: flex;
+      align-items: center; cursor: pointer;
+    }
+    .explore-actions img {
+      width: 18px; height: 18px; margin-right: 6px;
+      filter: invert(100%);
+    }
   </style>
 </head>
 <body>
@@ -94,12 +103,12 @@
   <img src="logo.png" class="logo"> TapMeet 💜
 </header>
 
-<nav>
-  <button onclick="showSection('login')">
+<nav id="navBar">
+  <button onclick="showSection('login')" id="loginBtn">
     <img src="https://cdn-icons-png.flaticon.com/512/295/295128.png">
     Login
   </button>
-  <button onclick="showSection('signup')">
+  <button onclick="showSection('signup')" id="signupBtn">
     <img src="https://cdn-icons-png.flaticon.com/512/1828/1828961.png">
     Signup
   </button>
@@ -116,7 +125,6 @@
 <!-- Login Screen -->
 <section id="login" class="active">
   <h2>Login to TapMeet</h2>
-  <p><small>⚠️ Stay safe: never share personal financial info.</small></p>
   <form id="loginForm">
     <input type="email" id="loginEmail" placeholder="Email" required>
     <input type="password" id="loginPassword" placeholder="Password" required>
@@ -127,26 +135,61 @@
 <!-- Signup Screen -->
 <section id="signup">
   <h2>Create Your Account</h2>
-  <p><small>⚠️ Warning: Upload only decent images to attract genuine people.</small></p>
   <form id="signupForm">
     <input type="text" id="name" placeholder="Full Name" required>
     <input type="number" id="age" placeholder="Age" required>
-    <input type="text" id="height" placeholder="Height (e.g. 5'8)" required>
+
+    <!-- Height selection -->
+    <label for="heightFt">Height:</label>
+    <select id="heightFt" required>
+      <option value="">Feet</option>
+      <option value="4">4 ft</option>
+      <option value="5">5 ft</option>
+      <option value="6">6 ft</option>
+      <option value="7">7 ft</option>
+    </select>
+    <select id="heightInch" required>
+      <option value="">Inches</option>
+      <option value="0">0 in</option>
+      <option value="1">1 in</option>
+      <option value="2">2 in</option>
+      <option value="3">3 in</option>
+      <option value="4">4 in</option>
+      <option value="5">5 in</option>
+      <option value="6">6 in</option>
+      <option value="7">7 in</option>
+      <option value="8">8 in</option>
+      <option value="9">9 in</option>
+      <option value="10">10 in</option>
+      <option value="11">11 in</option>
+    </select>
+
     <input type="text" id="blood" placeholder="Blood Group" required>
+    <input type="text" id="genotype" placeholder="Genotype" required>
+    <input type="text" id="religion" placeholder="Religion">
+    <input type="text" id="occupation" placeholder="Occupation">
+    <input type="text" id="goal" placeholder="Relationship Goal (e.g. Marriage)">
+    <input type="text" id="hobbies" placeholder="Hobbies / Interests">
+    <input type="text" id="education" placeholder="Education Level">
+    <input type="text" id="languages" placeholder="Languages">
+    <input type="text" id="lifestyle" placeholder="Lifestyle (Smoking/Drinking)">
+    <input type="text" id="pets" placeholder="Pets">
+    <input type="text" id="marital" placeholder="Marital Status">
+
     <textarea id="desc" placeholder="Write a short description" required></textarea>
     <input type="file" id="photo" accept="image/*" required>
     <input type="email" id="email" placeholder="Email" required>
     <input type="password" id="password" placeholder="Password" required>
-    <input type="text" id="telegram" placeholder="Telegram ID (e.g. @dechris)" required>
+    <input type="text" id="telegram" placeholder="Telegram ID" required>
     <button type="submit">Sign Up</button>
   </form>
 </section>
 
 <!-- Explore Screen -->
 <section id="explore">
-  <div style="display:flex; justify-content:space-between;">
-    <button onclick="filterNearby()">Near Me</button>
-    <button onclick="loadProfiles()">Show All</button>
+  <div class="explore-actions">
+    <button onclick="filterNearby()"><img src="https://cdn-icons-png.flaticon.com/512/535/535239.png">Near Me</button>
+    <button onclick="loadProfiles()"><img src="https://cdn-icons-png.flaticon.com/512/709/709496.png">Show All</button>
   </div>
   <h2>Meet New People</h2>
   <div id="profiles"></div>
@@ -159,32 +202,50 @@
 </section>
 
 <script>
-  const API_URL = "https://script.google.com/macros/s/AKfycby76krc6wnI8W5lBCyv7L_D5v10_YbW2hE3ZOne7pabz7RWyK12ikQnaOZFoaDYUyKa/exec"; // Replace with real Apps Script endpoint
+  const API_URL = "https://script.google.com/macros/s/AKfycby76krc6wnI8W5lBCyv7L_D5v10_YbW2hE3ZOne7pabz7RWyK12ikQnaOZFoaDYUyKa/exec"; // replace with your Apps Script deployment
 
   function showSection(id) {
     document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
     document.getElementById(id).classList.add("active");
   }
 
+  // Update nav visibility
+  function updateNav() {
+    const user = JSON.parse(localStorage.getItem("user"));
+    document.getElementById("loginBtn").style.display = user ? "none" : "inline";
+    document.getElementById("signupBtn").style.display = user ? "none" : "inline";
+  }
+
   // Signup
-  document.getElementById("signupForm").addEventListener("submit", async function(e) {
+  document.getElementById("signupForm").addEventListener("submit", async e => {
     e.preventDefault();
     const file = document.getElementById("photo").files[0];
     const reader = new FileReader();
     reader.onloadend = async function() {
-      // Upload photo to Catbox
       const formData = new FormData();
       formData.append("reqtype", "fileupload");
       formData.append("fileToUpload", file);
       const imgRes = await fetch("https://catbox.moe/user/api.php", { method: "POST", body: formData });
       const photoURL = await imgRes.text();
 
+      const height = document.getElementById("heightFt").value + " ft " + document.getElementById("heightInch").value + " in";
+
       const data = {
         action: "signup",
         name: document.getElementById("name").value,
         age: document.getElementById("age").value,
-        height: document.getElementById("height").value,
+        height: height,
         blood: document.getElementById("blood").value,
+        genotype: document.getElementById("genotype").value,
+        religion: document.getElementById("religion").value,
+        occupation: document.getElementById("occupation").value,
+        goal: document.getElementById("goal").value,
+        hobbies: document.getElementById("hobbies").value,
+        education: document.getElementById("education").value,
+        languages: document.getElementById("languages").value,
+        lifestyle: document.getElementById("lifestyle").value,
+        pets: document.getElementById("pets").value,
+        marital: document.getElementById("marital").value,
         desc: document.getElementById("desc").value,
         email: document.getElementById("email").value,
         password: document.getElementById("password").value,
@@ -195,12 +256,15 @@
       const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(data) });
       const msg = await res.text();
       alert(msg);
+      if (msg.includes("successful")) {
+        showSection("login");
+      }
     };
     reader.readAsDataURL(file);
   });
 
   // Login
-  document.getElementById("loginForm").addEventListener("submit", async function(e) {
+  document.getElementById("loginForm").addEventListener("submit", async e => {
     e.preventDefault();
     const data = {
       action: "login",
@@ -211,6 +275,7 @@
     const user = await res.json();
     if (user.success) {
       localStorage.setItem("user", JSON.stringify(user));
+      updateNav();
       loadProfiles();
       loadMyProfile();
       showSection("explore");
@@ -219,7 +284,7 @@
     }
   });
 
-  // Location handling
+  // Location
   let userLocation = "Unknown";
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(pos => {
@@ -230,30 +295,31 @@
   async function loadProfiles() {
     const res = await fetch(API_URL + "?action=getProfiles");
     const users = await res.json();
-    localStorage.setItem("profiles", JSON.stringify(users)); // cache
     renderProfiles(users);
   }
 
   function renderProfiles(users) {
     const container = document.getElementById("profiles");
     container.innerHTML = "";
+    const me = JSON.parse(localStorage.getItem("user"));
     users.forEach(u => {
+      const blurred = me ? "" : "blurred";
+      const details = me ? `
+        <p>Blood: ${u.blood} | Height: ${u.height}</p>
+        <p>${u.desc}</p>
+      ` : "";
       container.innerHTML += `
         <div class="profile-card">
-          <div class="location-tag">
-            <img src="https://cdn-icons-png.flaticon.com/512/535/535239.png">
-            ${u.location || "Unknown"}
-          </div>
-          <img src="${u.photo}" alt="profile">
+          <div class="location-tag"><img src="https://cdn-icons-png.flaticon.com/512/535/535239.png">${u.location || "Unknown"}</div>
+          <img src="${u.photo}" class="${blurred}" alt="profile">
           <h3>${u.name}, ${u.age}</h3>
-          <p>Blood Group: ${u.blood} | Height: ${u.height}</p>
-          <p>"${u.desc}"</p>
+          ${details}
         </div>
       `;
     });
   }
 
-  async function loadMyProfile() {
+  function loadMyProfile() {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user) {
       document.getElementById("myProfile").innerHTML = `
@@ -264,39 +330,43 @@
     }
     document.getElementById("myProfile").innerHTML = `
       <div class="profile-card">
-        <div class="location-tag">
-          <img src="https://cdn-icons-png.flaticon.com/512/535/535239.png">
-          ${user.location || "Unknown"}
-        </div>
-        <img src="${user.photo}" alt="profile">
+        <div class="location-tag"><img src="https://cdn-icons-png.flaticon.com/512/535/535239.png">${user.location || "Unknown"}</div>
+        <img src="${user.photo}">
         <h3>${user.name}, ${user.age}</h3>
-        <p>Blood Group: ${user.blood} | Height: ${user.height}</p>
-        <p>"${user.desc}"</p>
+        <p>${user.desc}</p>
+        <button class="settings-btn" onclick="logout()">Logout</button>
         <button class="settings-btn" onclick="deleteAccount()">Delete Account</button>
       </div>
     `;
   }
 
+  function logout() {
+    localStorage.removeItem("user");
+    updateNav();
+    loadMyProfile();
+    showSection("login");
+  }
+
   async function deleteAccount() {
-    if (!confirm("Are you sure you want to delete your account?")) return;
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user) return;
+    if (!confirm("Delete your account permanently?")) return;
     const res = await fetch(API_URL, {
       method: "POST",
       body: JSON.stringify({ action: "delete", email: user.email })
     });
-    const msg = await res.text();
-    alert(msg);
-    localStorage.removeItem("user");
-    loadMyProfile();
+    alert(await res.text());
+    logout();
   }
 
   function filterNearby() {
-    const users = JSON.parse(localStorage.getItem("profiles")) || [];
-    // For now just reuse all, later add distance calc
-    renderProfiles(users.slice(0, 5));
+    loadProfiles(); // Placeholder (can add distance filter later)
   }
+
+  // Init
+  updateNav();
+  loadMyProfile();
 </script>
 
 </body>
-      </html>
+</html>
