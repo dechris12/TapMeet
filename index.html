@@ -2,16 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TapMeet 💜</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Roboto', Arial, sans-serif;
       margin: 0; padding: 0;
-      background: #0a001a;
+      background: #0a001a; /* deep purple background */
       color: #eee;
+      transition: background 0.3s, color 0.3s;
+      max-width: 100vw;
+      overflow-x: hidden;
     }
     header {
-      background: #4b0082;
+      background: #4b0082; /* futuristic purple */
       color: white;
       padding: 15px;
       text-align: center;
@@ -22,35 +27,63 @@
       z-index: 1000;
       box-shadow: 0 2px 8px rgba(0,0,0,0.6);
     }
-    .logo { height: 32px; vertical-align: middle; margin-right: 8px; }
+    .logo {
+      height: 32px; vertical-align: middle; margin-right: 8px;
+    }
     nav {
       background: #120029;
       display: flex; justify-content: space-around;
       padding: 10px; border-bottom: 1px solid #2d0b52;
+      flex-wrap: wrap;
     }
     nav button {
       background: none; border: none;
       font-size: 12px; color: #aaa;
       cursor: pointer; text-align: center;
+      transition: color 0.3s, transform 0.3s;
+      margin: 5px;
+      flex: 1 1 auto;
+    }
+    nav button:hover {
+      color: #fff;
+      transform: scale(1.1);
     }
     nav button img {
       display: block; margin: 0 auto;
       width: 26px; height: 26px;
       filter: invert(90%);
+      transition: filter 0.3s;
     }
-    section { display: none; padding: 20px; }
+    nav button:hover img {
+      filter: invert(100%);
+    }
+    section {
+      display: none; padding: 20px;
+      animation: fadeIn 0.4s ease;
+      max-width: 800px;
+      margin: 0 auto;
+    }
     section.active { display: block; }
     form input, form select, form textarea {
       display: block; width: 100%;
       margin: 10px 0; padding: 10px;
       border-radius: 8px; border: 1px solid #333;
       background: #1e0036; color: #eee;
+      transition: border-color 0.3s;
+    }
+    form input:focus, form select:focus, form textarea:focus {
+      border-color: #6a0dad;
+      outline: none;
     }
     form button {
       background: #6a0dad;
       color: white; border: none;
       padding: 12px; border-radius: 8px;
       cursor: pointer; width: 100%;
+      transition: background 0.3s;
+    }
+    form button:hover {
+      background: #7b1fa2;
     }
     .profile-card {
       background: #1a002e;
@@ -58,12 +91,18 @@
       margin: 15px 0;
       box-shadow: 0 2px 12px rgba(0,0,0,0.4);
       position: relative;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .profile-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.6);
     }
     .profile-card img {
       width: 100%; border-radius: 12px;
+      transition: opacity 0.3s;
     }
-    .profile-card .blurred {
-      filter: blur(8px);
+    .profile-card img:hover {
+      opacity: 0.9;
     }
     .location-tag {
       position: absolute; top: 10px; left: 10px;
@@ -72,39 +111,56 @@
       padding: 4px 8px; border-radius: 8px;
       display: flex; align-items: center;
     }
-    .location-tag img { width: 14px; height: 14px; margin-right: 4px; filter: invert(100%); }
-    .settings-btn, .logout-btn {
+    .location-tag img {
+      width: 14px; height: 14px;
+      margin-right: 4px; filter: invert(100%);
+    }
+    .settings-btn {
       margin-top: 10px;
       background: #4b0082; color: white;
       border: none; padding: 10px;
       border-radius: 8px; cursor: pointer;
+      transition: background 0.3s;
       width: 100%;
     }
-    .explore-buttons {
-      display:flex; justify-content:space-between; margin-bottom:10px;
+    .settings-btn:hover {
+      background: #5e35b1;
     }
-    .explore-buttons button {
-      flex:1; margin:0 5px;
-      background:#6a0dad; color:#fff;
-      border:none; padding:10px;
-      border-radius:8px; cursor:pointer;
-      display:flex; align-items:center; justify-content:center;
+    .loader {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #6a0dad;
+      border-radius: 50%;
+      width: 20px; height: 20px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+      display: none;
     }
-    .explore-buttons img { width:18px; height:18px; margin-right:6px; filter:invert(100%); }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+    /* Media Queries for Responsiveness */
+    @media (max-width: 600px) {
+      header { font-size: 20px; padding: 10px; }
+      nav { padding: 5px; }
+      nav button { font-size: 10px; margin: 2px; }
+      nav button img { width: 20px; height: 20px; }
+      section { padding: 10px; }
+      .profile-card { padding: 10px; margin: 10px 0; }
+    }
+    @media (min-width: 601px) {
+      body { padding: 0 20px; }
+    }
   </style>
 </head>
 <body>
-
 <header>
   <img src="logo.png" class="logo"> TapMeet 💜
 </header>
-
-<nav id="navBar">
-  <button onclick="showSection('login')" id="loginBtn">
+<nav>
+  <button onclick="showSection('login')">
     <img src="https://cdn-icons-png.flaticon.com/512/295/295128.png">
     Login
   </button>
-  <button onclick="showSection('signup')" id="signupBtn">
+  <button onclick="showSection('signup')">
     <img src="https://cdn-icons-png.flaticon.com/512/1828/1828961.png">
     Signup
   </button>
@@ -117,150 +173,243 @@
     Profile
   </button>
 </nav>
-
 <!-- Login Screen -->
 <section id="login" class="active">
   <h2>Login to TapMeet</h2>
+  <p><small>⚠️ Stay safe: never share personal financial info.</small></p>
   <form id="loginForm">
     <input type="email" id="loginEmail" placeholder="Email" required>
-    <input type="password" id="loginPassword" placeholder="Password" required>
+    <input type="password" id="loginPassword" placeholder="Password" required minlength="6">
     <button type="submit">Login</button>
   </form>
 </section>
-
 <!-- Signup Screen -->
 <section id="signup">
   <h2>Create Your Account</h2>
+  <p><small>⚠️ Warning: Upload only decent images to attract genuine people.</small></p>
   <form id="signupForm">
     <input type="text" id="name" placeholder="Full Name" required>
-    <input type="number" id="age" placeholder="Age" required>
-    <input type="text" id="height" placeholder="Height (e.g. 5'8 ft)" required>
+    <input type="number" id="age" placeholder="Age" required min="18" max="99">
+    <input type="text" id="height" placeholder="Height (e.g. 5 ft 8 in)" required>
     <input type="text" id="blood" placeholder="Genotype" required>
     <textarea id="desc" placeholder="Write a short description" required></textarea>
     <input type="file" id="photo" accept="image/*" required>
     <input type="email" id="email" placeholder="Email" required>
-    <input type="password" id="password" placeholder="Password" required>
+    <input type="password" id="password" placeholder="Password" required minlength="6">
     <input type="text" id="telegram" placeholder="Telegram ID (e.g. @dechris)" required>
     <button type="submit">Sign Up</button>
   </form>
 </section>
-
 <!-- Explore Screen -->
 <section id="explore">
-  <div class="explore-buttons">
-    <button onclick="filterNearby()"><img src="https://cdn-icons-png.flaticon.com/512/684/684908.png"> Near Me</button>
-    <button onclick="loadProfiles()"><img src="https://cdn-icons-png.flaticon.com/512/709/709496.png"> Show All</button>
+  <div style="display:flex; justify-content:space-between; flex-wrap: wrap;">
+    <button style="background: #6a0dad; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; flex: 1; margin: 5px;" onclick="filterNearby()">
+      <img src="https://cdn-icons-png.flaticon.com/512/684/684809.png" style="width: 20px; vertical-align: middle; filter: invert(100%); margin-right: 5px;">Near Me
+    </button>
+    <button style="background: #6a0dad; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; flex: 1; margin: 5px;" onclick="loadProfiles()">
+      <img src="https://cdn-icons-png.flaticon.com/512/2983/2983646.png" style="width: 20px; vertical-align: middle; filter: invert(100%); margin-right: 5px;">Show All
+    </button>
   </div>
   <h2>Meet New People</h2>
   <div id="profiles"></div>
+  <div class="loader" id="exploreLoader"></div>
 </section>
-
 <!-- Profile Screen -->
 <section id="profile">
   <h2>My Profile</h2>
   <div id="myProfile">Loading...</div>
+  <div id="editProfileForm" style="display: none;">
+    <h3>Edit Profile</h3>
+    <form id="editForm">
+      <input type="text" id="editName" placeholder="Full Name" required>
+      <input type="number" id="editAge" placeholder="Age" required min="18" max="99">
+      <input type="text" id="editHeight" placeholder="Height (e.g. 5 ft 8 in)" required>
+      <input type="text" id="editBlood" placeholder="Genotype" required>
+      <textarea id="editDesc" placeholder="Write a short description" required></textarea>
+      <input type="file" id="editPhoto" accept="image/*">
+      <input type="text" id="editTelegram" placeholder="Telegram ID (e.g. @dechris)" required>
+      <button type="submit">Save Changes</button>
+    </form>
+  </div>
 </section>
-
 <script>
-  const API_URL = "https://script.google.com/macros/s/AKfycby76krc6wnI8W5lBCyv7L_D5v10_YbW2hE3ZOne7pabz7RWyK12ikQnaOZFoaDYUyKa/exec"; // Replace with your deployment URL
+  const API_URL = "https://script.google.com/macros/s/AKfycby76krc6wnI8W5lBCyv7L_D5v10_YbW2hE3ZOne7pabz7RWyK12ikQnaOZFoaDYUyKa/exec"; // Replace with real Apps Script endpoint
 
+  // Function to show sections with animation
   function showSection(id) {
     document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
     document.getElementById(id).classList.add("active");
   }
 
+  // Update navigation based on login status
   function updateNav() {
-    const user = JSON.parse(localStorage.getItem("user"));
-    document.getElementById("loginBtn").style.display = user ? "none" : "inline-block";
-    document.getElementById("signupBtn").style.display = user ? "none" : "inline-block";
+    const isLoggedIn = !!localStorage.getItem("user");
+    document.querySelector('button[onclick="showSection(\'login\')"]').style.display = isLoggedIn ? 'none' : 'block';
+    document.querySelector('button[onclick="showSection(\'signup\')"]').style.display = isLoggedIn ? 'none' : 'block';
   }
 
-  // Signup
+  // Show loader
+  function showLoader(id, show) {
+    document.getElementById(id).style.display = show ? 'block' : 'none';
+  }
+
+  // Signup with validations and error handling
   document.getElementById("signupForm").addEventListener("submit", async function(e) {
     e.preventDefault();
     const file = document.getElementById("photo").files[0];
-    const formData = new FormData();
-    formData.append("reqtype", "fileupload");
-    formData.append("fileToUpload", file);
-    const imgRes = await fetch("https://catbox.moe/user/api.php", { method: "POST", body: formData });
-    const photoURL = await imgRes.text();
+    if (!file) {
+      alert("Please select a photo.");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) { // 5MB limit
+      alert("Photo size too large. Max 5MB.");
+      return;
+    }
+    try {
+      // Upload photo to Catbox
+      const formData = new FormData();
+      formData.append("reqtype", "fileupload");
+      formData.append("fileToUpload", file);
+      const imgRes = await fetch("https://catbox.moe/user/api.php", { method: "POST", body: formData });
+      if (!imgRes.ok) throw new Error("Photo upload failed");
+      const photoURL = await imgRes.text();
 
-    const data = {
-      action: "signup",
-      name: document.getElementById("name").value,
-      age: document.getElementById("age").value,
-      height: document.getElementById("height").value,
-      blood: document.getElementById("blood").value,
-      desc: document.getElementById("desc").value,
-      email: document.getElementById("email").value,
-      password: document.getElementById("password").value,
-      telegram: document.getElementById("telegram").value,
-      photo: photoURL,
-      location: userLocation
-    };
-    const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(data) });
-    const msg = await res.text();
-    alert(msg);
-    if (msg.includes("Signup successful")) {
-      showSection("login");
+      const data = {
+        action: "signup",
+        name: document.getElementById("name").value.trim(),
+        age: parseInt(document.getElementById("age").value),
+        height: document.getElementById("height").value.trim(),
+        blood: document.getElementById("blood").value.trim(),
+        desc: document.getElementById("desc").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        password: document.getElementById("password").value,
+        telegram: document.getElementById("telegram").value.trim(),
+        photo: photoURL,
+        location: userLocation
+      };
+      const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(data) });
+      if (!res.ok) throw new Error("Signup failed");
+      const msg = await res.text();
+      alert(msg);
+      if (msg.includes("successful")) {
+        showSection("login");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("An error occurred during signup: " + error.message);
     }
   });
 
-  // Login
+  // Login with error handling
   document.getElementById("loginForm").addEventListener("submit", async function(e) {
     e.preventDefault();
-    const data = {
-      action: "login",
-      email: document.getElementById("loginEmail").value,
-      password: document.getElementById("loginPassword").value
-    };
-    const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(data) });
-    const user = await res.json();
-    if (user.success) {
-      localStorage.setItem("user", JSON.stringify(user));
-      updateNav();
-      loadProfiles();
-      loadMyProfile();
-      showSection("explore");
-    } else {
-      alert("Invalid login");
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value;
+    if (!email || !password) {
+      alert("Please fill in all fields");
+      return;
+    }
+    try {
+      const data = {
+        action: "login",
+        email: email,
+        password: password
+      };
+      const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(data) });
+      if (!res.ok) throw new Error("Login failed");
+      const user = await res.json();
+      if (user.success) {
+        localStorage.setItem("user", JSON.stringify(user));
+        updateNav();
+        loadProfiles();
+        loadMyProfile();
+        showSection("explore");
+      } else {
+        alert("Invalid login");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("An error occurred during login: " + error.message);
     }
   });
 
-  // Location handling
+  // Location handling with permission check
   let userLocation = "Unknown";
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(pos => {
       userLocation = pos.coords.latitude + "," + pos.coords.longitude;
-    });
+    }, err => {
+      console.error(err);
+      alert("Location access denied. Some features may be limited.");
+    }, { enableHighAccuracy: true, timeout: 5000 });
+  } else {
+    alert("Geolocation not supported by your browser.");
   }
 
+  // Load profiles with loader and error handling
   async function loadProfiles() {
-    const res = await fetch(API_URL + "?action=getProfiles");
-    const users = await res.json();
-    localStorage.setItem("profiles", JSON.stringify(users));
-    renderProfiles(users);
+    showLoader("exploreLoader", true);
+    try {
+      const res = await fetch(API_URL + "?action=getProfiles");
+      if (!res.ok) throw new Error("Failed to load profiles");
+      const users = await res.json();
+      localStorage.setItem("profiles", JSON.stringify(users)); // cache
+      renderProfiles(users);
+    } catch (error) {
+      console.error(error);
+      alert("Error loading profiles: " + error.message);
+    } finally {
+      showLoader("exploreLoader", false);
+    }
   }
 
+  // Distance calculation function
+  function getDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
+
+  // Render profiles based on login status
   function renderProfiles(users) {
-    const loggedIn = !!localStorage.getItem("user");
     const container = document.getElementById("profiles");
     container.innerHTML = "";
+    const isLoggedIn = !!localStorage.getItem("user");
+    const [userLat, userLon] = userLocation !== "Unknown" ? userLocation.split(',').map(Number) : [null, null];
     users.forEach(u => {
-      container.innerHTML += `
+      let locationDisplay = "Unknown";
+      if (userLat && userLon && u.location && u.location !== "Unknown") {
+        const [uLat, uLon] = u.location.split(',').map(Number);
+        const distance = getDistance(userLat, userLon, uLat, uLon);
+        locationDisplay = `${Math.round(distance)} km away`;
+      }
+      let cardHTML = `
         <div class="profile-card">
           <div class="location-tag">
             <img src="https://cdn-icons-png.flaticon.com/512/535/535239.png">
-            ${u.location || "Unknown"}
+            ${locationDisplay}
           </div>
-          <img src="${u.photo}" class="${loggedIn ? "" : "blurred"}">
-          <h3>${u.name}, ${u.age || ""}</h3>
-          ${loggedIn ? `<p>Genotype: ${u.blood} | Height: ${u.height}</p><p>"${u.desc}"</p>` : ""}
-        </div>
+          <img src="${u.photo}" alt="profile" style="${!isLoggedIn ? 'filter: blur(5px);' : ''}">
+          <h3>${u.name}${isLoggedIn ? `, ${u.age}` : ''}</h3>
       `;
+      if (isLoggedIn) {
+        cardHTML += `
+          <p>Genotype: ${u.blood} | Height: ${u.height}</p>
+          <p>"${u.desc}"</p>
+          <a href="https://t.me/${u.telegram.replace('@', '')}" target="_blank" style="color: #6a0dad; text-decoration: none;">Chat on Telegram</a>
+        `;
+      }
+      cardHTML += `</div>`;
+      container.innerHTML += cardHTML;
     });
   }
 
+  // Load my profile with edit option
   async function loadMyProfile() {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user) {
@@ -268,56 +417,133 @@
         <button onclick="showSection('login')">Login</button>
         <button onclick="showSection('signup')">Signup</button>
       `;
+      document.getElementById("editProfileForm").style.display = 'none';
       return;
     }
+    let locationDisplay = user.location || "Unknown";
     document.getElementById("myProfile").innerHTML = `
       <div class="profile-card">
         <div class="location-tag">
           <img src="https://cdn-icons-png.flaticon.com/512/535/535239.png">
-          ${user.location || "Unknown"}
+          ${locationDisplay}
         </div>
-        <img src="${user.photo}">
+        <img src="${user.photo}" alt="profile">
         <h3>${user.name}, ${user.age}</h3>
         <p>Genotype: ${user.blood} | Height: ${user.height}</p>
         <p>"${user.desc}"</p>
-        <button class="logout-btn" onclick="logout()">Logout</button>
+        <button class="settings-btn" onclick="showEditForm()">Edit Profile</button>
         <button class="settings-btn" onclick="deleteAccount()">Delete Account</button>
+        <button class="settings-btn" onclick="logout()">Logout</button>
       </div>
     `;
   }
 
-  function logout() {
-    localStorage.removeItem("user");
-    updateNav();
-    loadMyProfile();
-    showSection("login");
-  }
-
-  async function deleteAccount() {
-    if (!confirm("Are you sure you want to delete your account?")) return;
+  // Show edit form pre-filled
+  function showEditForm() {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user) return;
-    const res = await fetch(API_URL, {
-      method: "POST",
-      body: JSON.stringify({ action: "delete", email: user.email })
-    });
-    const msg = await res.text();
-    alert(msg);
+    document.getElementById("editName").value = user.name;
+    document.getElementById("editAge").value = user.age;
+    document.getElementById("editHeight").value = user.height;
+    document.getElementById("editBlood").value = user.blood;
+    document.getElementById("editDesc").value = user.desc;
+    document.getElementById("editTelegram").value = user.telegram;
+    document.getElementById("editProfileForm").style.display = 'block';
+  }
+
+  // Edit profile submit
+  document.getElementById("editForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) return;
+    let photoURL = user.photo;
+    const file = document.getElementById("editPhoto").files[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        alert("Photo size too large. Max 5MB.");
+        return;
+      }
+      try {
+        const formData = new FormData();
+        formData.append("reqtype", "fileupload");
+        formData.append("fileToUpload", file);
+        const imgRes = await fetch("https://catbox.moe/user/api.php", { method: "POST", body: formData });
+        if (!imgRes.ok) throw new Error("Photo upload failed");
+        photoURL = await imgRes.text();
+      } catch (error) {
+        alert("Photo upload failed: " + error.message);
+        return;
+      }
+    }
+    const data = {
+      action: "edit",
+      email: user.email,
+      name: document.getElementById("editName").value.trim(),
+      age: parseInt(document.getElementById("editAge").value),
+      height: document.getElementById("editHeight").value.trim(),
+      blood: document.getElementById("editBlood").value.trim(),
+      desc: document.getElementById("editDesc").value.trim(),
+      telegram: document.getElementById("editTelegram").value.trim(),
+      photo: photoURL,
+      location: userLocation
+    };
+    try {
+      const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(data) });
+      if (!res.ok) throw new Error("Edit failed");
+      const msg = await res.text();
+      alert(msg);
+      if (msg.includes("successful")) {
+        // Update local storage
+        user.name = data.name;
+        user.age = data.age;
+        user.height = data.height;
+        user.blood = data.blood;
+        user.desc = data.desc;
+        user.telegram = data.telegram;
+        user.photo = data.photo;
+        user.location = data.location;
+        localStorage.setItem("user", JSON.stringify(user));
+        loadMyProfile();
+        document.getElementById("editProfileForm").style.display = 'none';
+      }
+    } catch (error) {
+      alert("Error editing profile: " + error.message);
+    }
+  });
+
+  // Logout function
+  function logout() {
     localStorage.removeItem("user");
+    localStorage.removeItem("profiles");
     updateNav();
     loadMyProfile();
     showSection("login");
   }
 
-  function filterNearby() {
-    const users = JSON.parse(localStorage.getItem("profiles")) || [];
-    renderProfiles(users.slice(0, 5));
+  // Delete account with confirmation
+  async function deleteAccount() {
+    if (!confirm("Are you sure you want to delete your account? This cannot be undone.")) return;
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) return;
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({ action: "delete", email: user.email })
+      });
+      if (!res.ok) throw new Error("Delete failed");
+      const msg = await res.text();
+      alert(msg);
+      logout();
+    } catch (error) {
+      alert("Error deleting account: " + error.message);
+    }
   }
 
-  // Initialize
-  updateNav();
-  loadMyProfile();
-</script>
-
-</body>
-    </html>
+  // Filter nearby with sorting
+  function filterNearby() {
+    const users = JSON.parse(localStorage.getItem("profiles")) || [];
+    if (userLocation === "Unknown") {
+      alert("Location not available. Please enable location services.");
+      return;
+    }
+    const [userLat, userLon] = userLocation.split(',')
