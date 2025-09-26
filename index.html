@@ -1,186 +1,340 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>TapMeet 💜</title>
-
-  <!-- ✅ This line makes the page responsive -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0; padding: 0;
-      background: #0a001a;
-      color: #eee;
-    }
-    header {
-      background: #4b0082;
-      color: white;
-      padding: 15px;
-      text-align: center;
-      font-size: 22px;
-      font-weight: bold;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.6);
-    }
-    .logo { height: 28px; vertical-align: middle; margin-right: 8px; }
-
-    nav {
-      background: #120029;
-      display: flex;
-      justify-content: space-around;
-      padding: 8px;
-      border-bottom: 1px solid #2d0b52;
-      position: sticky;
-      bottom: 0;
-    }
-    nav button {
-      background: none;
-      border: none;
-      font-size: 11px;
-      color: #aaa;
-      cursor: pointer;
-      text-align: center;
-      flex: 1;
-    }
-    nav button img {
-      display: block;
-      margin: 0 auto 3px;
-      width: 22px;
-      height: 22px;
-      filter: invert(90%);
-    }
-
-    section { display: none; padding: 15px; }
-    section.active { display: block; }
-
-    form input, form select, form textarea {
-      display: block;
-      width: 100%;
-      margin: 8px 0;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #333;
-      background: #1e0036;
-      color: #eee;
-      font-size: 14px;
-    }
-    form button {
-      background: #6a0dad;
-      color: white;
-      border: none;
-      padding: 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      width: 100%;
-      font-size: 15px;
-    }
-
-    .profile-card {
-      background: #1a002e;
-      padding: 12px;
-      border-radius: 12px;
-      margin: 12px 0;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.4);
-      position: relative;
-    }
-    .profile-card img {
-      width: 100%;
-      border-radius: 10px;
-      max-height: 280px;
-      object-fit: cover;
-    }
-    .profile-card .blurred { filter: blur(8px); }
-
-    .location-tag {
-      position: absolute; top: 10px; left: 10px;
-      background: rgba(0,0,0,0.6);
-      color: #fff; font-size: 11px;
-      padding: 3px 7px; border-radius: 6px;
-      display: flex; align-items: center;
-    }
-    .location-tag img {
-      width: 12px; height: 12px;
-      margin-right: 4px;
-      filter: invert(100%);
-    }
-
-    .settings-btn, .logout-btn {
-      margin-top: 8px;
-      background: #4b0082; color: white;
-      border: none; padding: 10px;
-      border-radius: 8px;
-      cursor: pointer;
-      width: 100%;
-      font-size: 14px;
-    }
-
-    .explore-buttons {
-      display:flex; flex-wrap: wrap;
-      gap: 8px; margin-bottom: 10px;
-    }
-    .explore-buttons button {
-      flex:1;
-      background:#6a0dad; color:#fff;
-      border:none; padding:10px;
-      border-radius:8px; cursor:pointer;
-      display:flex; align-items:center; justify-content:center;
-      font-size: 13px;
-    }
-    .explore-buttons img {
-      width:16px; height:16px;
-      margin-right:5px; filter:invert(100%);
-    }
-
-    /* ✅ Mobile adjustments */
-    @media (max-width: 600px) {
-      header { font-size: 18px; }
-      nav button img { width: 20px; height: 20px; }
-      nav button { font-size: 10px; }
-      .profile-card img { max-height: 220px; }
-    }
-
-    /* ✅ Larger screen tweaks */
-    @media (min-width: 900px) {
-      section { max-width: 700px; margin: 0 auto; }
-    }
-  </style>
-</head>
-<body>
-
-<header>
-  <img src="logo.png" class="logo"> TapMeet 💜
-</header>
-
-<nav id="navBar">
-  <button onclick="showSection('login')" id="loginBtn">
-    <img src="https://cdn-icons-png.flaticon.com/512/295/295128.png">
-    Login
-  </button>
-  <button onclick="showSection('signup')" id="signupBtn">
-    <img src="https://cdn-icons-png.flaticon.com/512/1828/1828961.png">
-    Signup
-  </button>
-  <button onclick="showSection('explore')">
-    <img src="https://cdn-icons-png.flaticon.com/512/1946/1946488.png">
-    Explore
-  </button>
-  <button onclick="showSection('profile')">
-    <img src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png">
-    Profile
-  </button>
-</nav>
-
-<!-- ✅ rest of your sections go here (login, signup, explore, profile) -->
-
-<script>
-  function showSection(id) {
-    document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
-    document.getElementById(id).classList.add("active");
-  }
-</script>
-</body>
-  </html>
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+  <meta charset="UTF-8">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- ✅ Mobile fit fix -->  
+  <title>TapMeet 💜</title>  
+  <style>  
+    body {  
+      font-family: Arial, sans-serif;  
+      margin: 0; padding: 0;  
+      background: #0a001a;  
+      color: #eee;  
+    }  
+    header {  
+      background: #4b0082;  
+      color: white;  
+      padding: 15px;  
+      text-align: center;  
+      font-size: 24px;  
+      font-weight: bold;  
+      position: sticky;  
+      top: 0;  
+      z-index: 1000;  
+      box-shadow: 0 2px 8px rgba(0,0,0,0.6);  
+    }  
+    .logo { height: 32px; vertical-align: middle; margin-right: 8px; }  
+    nav {  
+      background: #120029;  
+      display: flex; justify-content: space-around;  
+      padding: 10px; border-bottom: 1px solid #2d0b52;  
+      flex-wrap: wrap; /* ✅ Prevents overflow on small screens */  
+    }  
+    nav button {  
+      background: none; border: none;  
+      font-size: 12px; color: #aaa;  
+      cursor: pointer; text-align: center;  
+      flex: 1; /* ✅ Buttons resize evenly on mobile */  
+      max-width: 80px;  
+      margin: 5px;  
+    }  
+    nav button img {  
+      display: block; margin: 0 auto;  
+      width: 26px; height: 26px;  
+      filter: invert(90%);  
+    }  
+    section { display: none; padding: 20px; }  
+    section.active { display: block; }  
+    form input, form select, form textarea {  
+      display: block; width: 100%;  
+      margin: 10px 0; padding: 10px;  
+      border-radius: 8px; border: 1px solid #333;  
+      background: #1e0036; color: #eee;  
+      box-sizing: border-box;  
+    }  
+    form button {  
+      background: #6a0dad;  
+      color: white; border: none;  
+      padding: 12px; border-radius: 8px;  
+      cursor: pointer; width: 100%;  
+    }  
+    .profile-card {  
+      background: #1a002e;  
+      padding: 15px; border-radius: 12px;  
+      margin: 15px 0;  
+      box-shadow: 0 2px 12px rgba(0,0,0,0.4);  
+      position: relative;  
+    }  
+    .profile-card img {  
+      width: 100%; border-radius: 12px;  
+      max-height: 320px;  
+      object-fit: cover; /* ✅ Keeps images proportional */  
+    }  
+    .profile-card .blurred {  
+      filter: blur(8px);  
+    }  
+    .location-tag {  
+      position: absolute; top: 10px; left: 10px;  
+      background: rgba(0,0,0,0.6);  
+      color: #fff; font-size: 12px;  
+      padding: 4px 8px; border-radius: 8px;  
+      display: flex; align-items: center;  
+    }  
+    .location-tag img { width: 14px; height: 14px; margin-right: 4px; filter: invert(100%); }  
+    .settings-btn, .logout-btn {  
+      margin-top: 10px;  
+      background: #4b0082; color: white;  
+      border: none; padding: 10px;  
+      border-radius: 8px; cursor: pointer;  
+      width: 100%;  
+    }  
+    .explore-buttons {  
+      display:flex; flex-wrap: wrap; gap:10px;  
+      margin-bottom:10px;  
+    }  
+    .explore-buttons button {  
+      flex:1; min-width: 120px;  
+      background:#6a0dad; color:#fff;  
+      border:none; padding:10px;  
+      border-radius:8px; cursor:pointer;  
+      display:flex; align-items:center; justify-content:center;  
+    }  
+    .explore-buttons img { width:18px; height:18px; margin-right:6px; filter:invert(100%); }  
+  
+    /* ✅ Extra responsive tweaks */  
+    @media (max-width: 600px) {  
+      header { font-size: 20px; }  
+      nav button { font-size: 10px; }  
+      form input, form textarea { font-size: 14px; }  
+      .profile-card h3 { font-size: 16px; }  
+    }  
+  </style>  
+</head>  
+<body>  
+  
+<header>  
+  <img src="logo.png" class="logo"> TapMeet 💜  
+</header>  
+  
+<nav id="navBar">  
+  <button onclick="showSection('login')" id="loginBtn">  
+    <img src="https://cdn-icons-png.flaticon.com/512/295/295128.png">  
+    Login  
+  </button>  
+  <button onclick="showSection('signup')" id="signupBtn">  
+    <img src="https://cdn-icons-png.flaticon.com/512/1828/1828961.png">  
+    Signup  
+  </button>  
+  <button onclick="showSection('explore')">  
+    <img src="https://cdn-icons-png.flaticon.com/512/1946/1946488.png">  
+    Explore  
+  </button>  
+  <button onclick="showSection('profile')">  
+    <img src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png">  
+    Profile  
+  </button>  
+</nav>  
+  
+<!-- Login Screen -->  
+<section id="login" class="active">  
+  <h2>Login to TapMeet</h2>  
+  <form id="loginForm">  
+    <input type="email" id="loginEmail" placeholder="Email" required>  
+    <input type="password" id="loginPassword" placeholder="Password" required>  
+    <button type="submit">Login</button>  
+  </form>  
+</section>  
+  
+<!-- Signup Screen -->  
+<section id="signup">  
+  <h2>Create Your Account</h2>  
+  <form id="signupForm">  
+    <input type="text" id="name" placeholder="Full Name" required>  
+    <input type="number" id="age" placeholder="Age" required>  
+    <input type="text" id="height" placeholder="Height (e.g. 5'8 ft)" required>  
+    <input type="text" id="blood" placeholder="Genotype" required>  
+    <textarea id="desc" placeholder="Write a short description" required></textarea>  
+    <input type="file" id="photo" accept="image/*" required>  
+    <input type="email" id="email" placeholder="Email" required>  
+    <input type="password" id="password" placeholder="Password" required>  
+    <input type="text" id="telegram" placeholder="Telegram ID (e.g. @dechris)" required>  
+    <button type="submit">Sign Up</button>  
+  </form>  
+</section>  
+  
+<!-- Explore Screen -->  
+<section id="explore">  
+  <div class="explore-buttons">  
+    <button onclick="filterNearby()"><img src="https://cdn-icons-png.flaticon.com/512/684/684908.png"> Near Me</button>  
+    <button onclick="loadProfiles()"><img src="https://cdn-icons-png.flaticon.com/512/709/709496.png"> Show All</button>  
+  </div>  
+  <h2>Meet New People</h2>  
+  <div id="profiles"></div>  
+</section>  
+  
+<!-- Profile Screen -->  
+<section id="profile">  
+  <h2>My Profile</h2>  
+  <div id="myProfile">Loading...</div>  
+</section>  
+  
+<script>  
+  const API_URL = "YOUR_DEPLOYED_APPSCRIPT_URL"; // Replace with your deployment URL  
+  
+  function showSection(id) {  
+    document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));  
+    document.getElementById(id).classList.add("active");  
+  }  
+  
+  function updateNav() {  
+    const user = JSON.parse(localStorage.getItem("user"));  
+    document.getElementById("loginBtn").style.display = user ? "none" : "inline-block";  
+    document.getElementById("signupBtn").style.display = user ? "none" : "inline-block";  
+  }  
+  
+  // Signup  
+  document.getElementById("signupForm").addEventListener("submit", async function(e) {  
+    e.preventDefault();  
+    const file = document.getElementById("photo").files[0];  
+    const formData = new FormData();  
+    formData.append("reqtype", "fileupload");  
+    formData.append("fileToUpload", file);  
+    const imgRes = await fetch("https://catbox.moe/user/api.php", { method: "POST", body: formData });  
+    const photoURL = await imgRes.text();  
+  
+    const data = {  
+      action: "signup",  
+      name: document.getElementById("name").value,  
+      age: document.getElementById("age").value,  
+      height: document.getElementById("height").value,  
+      blood: document.getElementById("blood").value,  
+      desc: document.getElementById("desc").value,  
+      email: document.getElementById("email").value,  
+      password: document.getElementById("password").value,  
+      telegram: document.getElementById("telegram").value,  
+      photo: photoURL,  
+      location: userLocation  
+    };  
+    const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(data) });  
+    const msg = await res.text();  
+    alert(msg);  
+    if (msg.includes("Signup successful")) {  
+      showSection("login");  
+    }  
+  });  
+  
+  // Login  
+  document.getElementById("loginForm").addEventListener("submit", async function(e) {  
+    e.preventDefault();  
+    const data = {  
+      action: "login",  
+      email: document.getElementById("loginEmail").value,  
+      password: document.getElementById("loginPassword").value  
+    };  
+    const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(data) });  
+    const user = await res.json();  
+    if (user.success) {  
+      localStorage.setItem("user", JSON.stringify(user));  
+      updateNav();  
+      loadProfiles();  
+      loadMyProfile();  
+      showSection("explore");  
+    } else {  
+      alert("Invalid login");  
+    }  
+  });  
+  
+  // Location handling  
+  let userLocation = "Unknown";  
+  if (navigator.geolocation) {  
+    navigator.geolocation.getCurrentPosition(pos => {  
+      userLocation = pos.coords.latitude + "," + pos.coords.longitude;  
+    });  
+  }  
+  
+  async function loadProfiles() {  
+    const res = await fetch(API_URL + "?action=getProfiles");  
+    const users = await res.json();  
+    localStorage.setItem("profiles", JSON.stringify(users));  
+    renderProfiles(users);  
+  }  
+  
+  function renderProfiles(users) {  
+    const loggedIn = !!localStorage.getItem("user");  
+    const container = document.getElementById("profiles");  
+    container.innerHTML = "";  
+    users.forEach(u => {  
+      container.innerHTML += `  
+        <div class="profile-card">  
+          <div class="location-tag">  
+            <img src="https://cdn-icons-png.flaticon.com/512/535/535239.png">  
+            ${u.location || "Unknown"}  
+          </div>  
+          <img src="${u.photo}" class="${loggedIn ? "" : "blurred"}">  
+          <h3>${u.name}, ${u.age || ""}</h3>  
+          ${loggedIn ? `<p>Genotype: ${u.blood} | Height: ${u.height}</p><p>"${u.desc}"</p>` : ""}  
+        </div>  
+      `;  
+    });  
+  }  
+  
+  async function loadMyProfile() {  
+    const user = JSON.parse(localStorage.getItem("user"));  
+    if (!user) {  
+      document.getElementById("myProfile").innerHTML = `  
+        <button onclick="showSection('login')">Login</button>  
+        <button onclick="showSection('signup')">Signup</button>  
+      `;  
+      return;  
+    }  
+    document.getElementById("myProfile").innerHTML = `  
+      <div class="profile-card">  
+        <div class="location-tag">  
+          <img src="https://cdn-icons-png.flaticon.com/512/535/535239.png">  
+          ${user.location || "Unknown"}  
+        </div>  
+        <img src="${user.photo}">  
+        <h3>${user.name}, ${user.age}</h3>  
+        <p>Genotype: ${user.blood} | Height: ${user.height}</p>  
+        <p>"${user.desc}"</p>  
+        <button class="logout-btn" onclick="logout()">Logout</button>  
+        <button class="settings-btn" onclick="deleteAccount()">Delete Account</button>  
+      </div>  
+    `;  
+  }  
+  
+  function logout() {  
+    localStorage.removeItem("user");  
+    updateNav();  
+    loadMyProfile();  
+    showSection("login");  
+  }  
+  
+  async function deleteAccount() {  
+    if (!confirm("Are you sure you want to delete your account?")) return;  
+    const user = JSON.parse(localStorage.getItem("user"));  
+    if (!user) return;  
+    const res = await fetch(API_URL, {  
+      method: "POST",  
+      body: JSON.stringify({ action: "delete", email: user.email })  
+    });  
+    const msg = await res.text();  
+    alert(msg);  
+    localStorage.removeItem("user");  
+    updateNav();  
+    loadMyProfile();  
+    showSection("login");  
+  }  
+  
+  function filterNearby() {  
+    const users = JSON.parse(localStorage.getItem("profiles")) || [];  
+    renderProfiles(users.slice(0, 5));  
+  }  
+  
+  // Initialize  
+  updateNav();  
+  loadMyProfile();  
+</script>  
+  
+</body>  
+</html>
