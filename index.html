@@ -1,309 +1,529 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>💜 TapMeet</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- ✅ Responsive -->
-  <meta name="theme-color" content="#6a0dad">
-  <link rel="manifest" href="manifest.json">
-  <style>
-    body { font-family: Arial, sans-serif; margin:0; background:#f7f0ff; color:#222; }
-    header { background:#6a0dad; color:white; text-align:center; padding:15px; position:sticky; top:0; }
-    nav { background:#8a2be2; display:flex; justify-content:center; flex-wrap:wrap; gap:10px; padding:10px; }
-    nav button { background:white; color:#6a0dad; border:none; padding:10px 15px; border-radius:20px; cursor:pointer; font-size:14px; display: flex; flex-direction: column; align-items: center; }
-    nav button:hover { background:#eee; }
-    .icon { font-size: 20px; }
-    .caption { font-size: 10px; }
-    .section { display:none; padding:20px; max-width:600px; margin:auto; }
-    .active { display:block; }
-    input, textarea { width:100%; padding:10px; margin:6px 0; border-radius:5px; border:1px solid #ccc; font-size:14px; }
-    button.main-btn { background:#6a0dad; color:white; border:none; padding:12px; border-radius:10px; cursor:pointer; font-size:15px; width:100%; display: flex; align-items: center; justify-content: center; gap: 8px; }
-    button.main-btn:hover { background:#500a96; }
-    .profile-card { background:white; border-radius:10px; padding:15px; margin:10px 0; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
-    .profile-card img { width:100%; max-height:200px; object-fit:cover; border-radius:10px; }
-    /* Dark mode */
-    .dark { background:#121212; color:white; }
-    .dark header { background:#3c0a64; }
-    .dark nav { background:#500a96; }
-    .dark input, .dark textarea { background:#1e1e1e; color:white; border:1px solid #555; }
-    .dark .profile-card { background:#1e1e1e; color:white; }
-    .toggle { position:absolute; right:20px; top:20px; cursor:pointer; font-size:20px; }
-    /* Loading Popup */
-    #loadingPopup {
-      display:none; position:fixed; top:0; left:0; width:100%; height:100%;
-      background:rgba(0,0,0,0.8); color:white; display:flex;
-      align-items:center; justify-content:center; flex-direction:column;
-      z-index:2000; text-align:center;
-    }
-    .spinner {
-      border:6px solid #444; border-top:6px solid #6a0dad;
-      border-radius:50%; width:60px; height:60px;
-      animation: spin 1s linear infinite; margin-bottom:20px;
-    }
-    @keyframes spin { 100% { transform: rotate(360deg); } }
-    /* Tabs in Explore */
-    .tabs { display: flex; justify-content: center; gap: 10px; padding: 10px; }
-    .tab { background: white; color: #6a0dad; border: none; padding: 10px 15px; border-radius: 20px; cursor: pointer; font-size: 14px; display: flex; flex-direction: column; align-items: center; }
-    .tab:hover { background: #eee; }
-    .tab.active { border: 2px solid #d8b4fe; } /* Light purple stroke */
-    /* Mobile friendly */
-    @media (max-width:600px) {
-      nav button { font-size:12px; padding:8px; }
-      input, textarea { font-size:13px; }
-      button.main-btn { font-size:14px; }
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>TapMeet 💜</title>
+
+<!-- PWA manifest -->
+<link rel="manifest" href="manifest.json">
+
+<style>
+  :root{
+    --bg:#0a001a;
+    --card:#1a002e;
+    --accent:#6a0dad;
+    --accent-weak:#8b3bdc;
+    --muted:#bdb7d9;
+    --white:#ffffff;
+  }
+
+  /* Light mode support */
+  body.light {
+    --bg:#f7f0ff; --card:#fff; --accent:#6a0dad; --accent-weak:#8b3bdc; --muted:#5c2b8e; --white:#111;
+  }
+
+  html,body{height:100%; margin:0; font-family:Inter, system-ui, -apple-system, Arial, sans-serif; background:var(--bg); color:var(--white);}
+  header{background:linear-gradient(180deg,var(--accent),var(--accent-weak)); padding:14px 12px; position:sticky; top:0; z-index:50; box-shadow:0 6px 18px rgba(0,0,0,0.35);}
+  header .top {display:flex; align-items:center; gap:12px; max-width:1100px; margin:0 auto;}
+  header .logo {width:36px; height:36px; border-radius:8px; background:rgba(255,255,255,0.12); display:inline-flex; align-items:center; justify-content:center; font-weight:700;}
+  header h1{margin:0; font-size:18px; letter-spacing:0.6px;}
+  header .controls {margin-left:auto; display:flex; gap:8px; align-items:center;}
+
+  nav.main {
+    max-width:1100px; margin:12px auto; padding:8px 10px; display:flex; gap:6px; align-items:center; justify-content:space-between;
+  }
+
+  .nav-left {display:flex; gap:8px; align-items:center;}
+  .nav-btn {
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:6px; padding:8px 10px; min-width:64px; border-radius:10px; background:transparent; border:1px solid rgba(255,255,255,0.04);
+    color:var(--muted); cursor:pointer; font-size:12px;
+  }
+  .nav-btn img{width:22px; height:22px; filter:invert(100%);}
+
+  /* active nav small highlight */
+  .nav-btn.active { box-shadow: 0 0 0 3px rgba(106,13,173,0.12); border-color:rgba(106,13,173,0.5); color:var(--white); }
+
+  .container {max-width:1100px; margin:0 auto; padding:12px; box-sizing:border-box;}
+
+  /* sections */
+  .page { display:none; }
+  .page.active{ display:block; }
+
+  /* form styles */
+  .card { background:var(--card); border-radius:12px; padding:14px; box-shadow:0 6px 20px rgba(0,0,0,0.45); color:var(--white); }
+  .row { display:flex; gap:8px; }
+  .col { flex:1; }
+  label { display:block; font-size:12px; color:var(--muted); margin-bottom:6px; }
+  input[type="text"], input[type="email"], input[type="password"], input[type="number"], input[type="url"], textarea, select {
+    width:100%; padding:10px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background:rgba(255,255,255,0.02); color:var(--white);
+    box-sizing:border-box; font-size:14px;
+  }
+  textarea { min-height:90px; resize:vertical; }
+
+  .hint { font-size:12px; color:var(--muted); margin-top:6px; }
+
+  .primary { background:linear-gradient(90deg,var(--accent),var(--accent-weak)); color:var(--white); border:none; padding:12px 14px; border-radius:10px; cursor:pointer; font-weight:600; width:100%; }
+  .secondary { background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--muted); padding:8px 12px; border-radius:8px; cursor:pointer; }
+
+  /* profiles grid */
+  .tabs { display:flex; gap:8px; margin-bottom:10px; align-items:center; }
+  .tab { padding:8px 12px; border-radius:10px; cursor:pointer; background:transparent; border:1px solid rgba(255,255,255,0.03); color:var(--muted); display:inline-flex; gap:8px; align-items:center; }
+  .tab.active { box-shadow: 0 0 0 3px rgba(106,13,173,0.08); border-color: rgba(106,13,173,0.35); color:var(--white); }
+
+  .profiles { display:grid; grid-template-columns: repeat(2,1fr); gap:12px; }
+  .profile { background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:10px; border-radius:10px; }
+  .profile .imgwrap { border-radius:8px; overflow:hidden; height:160px; background:#111; display:flex; align-items:center; justify-content:center; }
+  .profile img { width:100%; height:100%; object-fit:cover; display:block; }
+  .profile h3 { margin:8px 0 4px; font-size:16px; }
+  .profile p { margin:0; font-size:13px; color:var(--muted); }
+
+  /* small icon + caption used for lots of buttons */
+  .icon-btn { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:8px; border-radius:10px; background:transparent; border:none; cursor:pointer; color:var(--muted); font-size:12px; }
+  .icon-btn img { width:28px; height:28px; filter:invert(100%); }
+
+  /* mobile responsiveness */
+  @media (max-width:800px) {
+    .profiles { grid-template-columns:1fr; }
+    header .top { padding:0 8px; }
+    .nav-btn { font-size:11px; min-width:56px; }
+  }
+
+  /* loading popup */
+  #loadingPopup {
+    position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:9999;
+    background:linear-gradient(180deg, rgba(5,5,10,0.5), rgba(5,5,10,0.6)); color:white;
+  }
+  .loader-card { background:rgba(255,255,255,0.03); padding:20px; border-radius:12px; display:flex; flex-direction:column; gap:12px; align-items:center; width:320px; max-width:90%; }
+  .spinner {
+    width:72px; height:72px; border-radius:999px; border:6px solid rgba(255,255,255,0.08); border-top-color:var(--accent); animation:spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform:rotate(360deg) } }
+
+  .small-muted { font-size:13px; color:rgba(255,255,255,0.7) }
+  .error { color:#ff6b6b; font-weight:600; margin-top:6px }
+  .success { color:#7af29a; font-weight:600; margin-top:6px }
+</style>
 </head>
 <body>
-  <header>
-    <h1>💜 TapMeet</h1>
-    <span class="toggle" onclick="toggleMode()">🌓</span>
-  </header>
 
-  <nav>
-    <button onclick="showSection('signup')">
-      <span class="icon">📝</span>
-      <span class="caption">Signup</span>
-    </button>
-    <button onclick="showSection('login')">
-      <span class="icon">🔑</span>
-      <span class="caption">Login</span>
-    </button>
-    <button onclick="showSection('explore')">
-      <span class="icon">🔍</span>
-      <span class="caption">Explore</span>
-    </button>
-  </nav>
+<header>
+  <div class="top">
+    <div class="logo">TM</div>
+    <h1>TapMeet</h1>
 
-  <!-- Signup -->
-  <div id="signup" class="section active">
-    <h2>Create Account</h2>
-    <input id="su_name" placeholder="Name" required>
-    <input id="su_age" placeholder="Age" required>
-    <input id="su_height" placeholder="Height" required>
-    <input id="su_blood" placeholder="Blood Group" required>
-    <input id="su_genotype" placeholder="Genotype" required>
-    <input id="su_location" placeholder="Location">
-    <textarea id="su_desc" placeholder="Description"></textarea>
-    <input id="su_telegram" placeholder="Telegram">
-    <input id="su_whatsapp" placeholder="WhatsApp">
-    <input id="su_email" type="email" placeholder="Email" required>
-    <input id="su_password" type="password" placeholder="Password" required>
-    <input id="su_photo" placeholder="Photo URL">
-    <button class="main-btn" onclick="signup()"><span class="icon">📝</span>Sign Up</button>
-    <p id="signup_msg"></p>
-  </div>
-
-  <!-- Login -->
-  <div id="login" class="section">
-    <h2>Login</h2>
-    <input id="li_email" placeholder="Email">
-    <input id="li_password" type="password" placeholder="Password">
-    <label><input type="checkbox" id="remember"> Remember me</label>
-    <button class="main-btn" onclick="login()"><span class="icon">🔑</span>Login</button>
-    <p id="login_msg"></p>
-  </div>
-
-  <!-- Explore -->
-  <div id="explore" class="section">
-    <h2>Explore Profiles</h2>
-    <div class="tabs">
-      <button id="showall" class="tab active" onclick="showTab('all')">
-        <span class="icon">🌍</span>
-        <span class="caption">Show All</span>
+    <div class="controls">
+      <button class="icon-btn" id="installBtn" title="Install TapMeet" style="display:none">
+        <img src="https://cdn-icons-png.flaticon.com/512/545/545665.png" alt="install">
+        <div style="font-size:11px;color:rgba(255,255,255,0.85)">Install</div>
       </button>
-      <button id="nearme" class="tab" onclick="showTab('near')">
-        <span class="icon">📍</span>
-        <span class="caption">Near Me</span>
+
+      <button class="icon-btn" id="toggleModeBtn" title="Toggle mode">
+        <img src="https://cdn-icons-png.flaticon.com/512/869/869869.png" alt="mode">
+        <div style="font-size:11px;color:rgba(255,255,255,0.85)">Mode</div>
       </button>
     </div>
-    <div id="profiles"></div>
+  </div>
+</header>
+
+<nav class="main">
+  <div class="nav-left">
+    <button class="nav-btn active" id="nav_home">
+      <img src="https://cdn-icons-png.flaticon.com/512/1946/1946488.png" alt="home">
+      <div style="font-size:11px">Home</div>
+    </button>
+
+    <button class="nav-btn" id="nav_signup">
+      <img src="https://cdn-icons-png.flaticon.com/512/1828/1828961.png" alt="signup">
+      <div style="font-size:11px">Signup</div>
+    </button>
+
+    <button class="nav-btn" id="nav_login">
+      <img src="https://cdn-icons-png.flaticon.com/512/295/295128.png" alt="login">
+      <div style="font-size:11px">Login</div>
+    </button>
+
+    <button class="nav-btn" id="nav_explore">
+      <img src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png" alt="explore">
+      <div style="font-size:11px">Explore</div>
+    </button>
   </div>
 
-  <!-- Futuristic Loading Popup -->
-  <div id="loadingPopup">
-    <div class="spinner"></div>
-    <h3 id="loadingText">Please wait...</h3>
+  <div style="display:flex; gap:8px; align-items:center;">
+    <div style="font-size:12px; color:var(--muted)">TapMeet • secure prototype</div>
   </div>
+</nav>
 
-  <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbzA9ReKAtIBXOU4ySInm3a06-hmTBZ11dqBqjIfPEYKVrFxTo2X0Ylyi9vD9XMzrzQ/exec";
+<div class="container">
 
-    // Persist dark mode
-    if (localStorage.getItem('dark') === 'true') {
-      document.body.classList.add('dark');
+  <!-- HOME screen (landing + quick links) -->
+  <section id="home" class="page active">
+    <div class="card">
+      <h2>Welcome to TapMeet</h2>
+      <p class="small-muted">Find people near you. Please follow safety advice — never send money.</p>
+
+      <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;">
+        <button class="icon-btn" id="home_signup_btn">
+          <img src="https://cdn-icons-png.flaticon.com/512/706/706164.png" alt="">
+          <div>Join</div>
+        </button>
+        <button class="icon-btn" id="home_browse_btn">
+          <img src="https://cdn-icons-png.flaticon.com/512/3523/3523063.png" alt="">
+          <div>Browse</div>
+        </button>
+        <button class="icon-btn" id="home_account_btn">
+          <img src="https://cdn-icons-png.flaticon.com/512/1828/1828490.png" alt="">
+          <div>Account</div>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIGNUP -->
+  <section id="signup" class="page">
+    <div class="card">
+      <h2>Create an account</h2>
+
+      <div class="row" style="margin-top:8px">
+        <div class="col">
+          <label>Full name</label>
+          <input id="su_name" type="text" placeholder="Jane Doe">
+        </div>
+        <div class="col">
+          <label>Age</label>
+          <input id="su_age" type="number" placeholder="e.g. 28">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label>Height (ft/in)</label>
+          <input id="su_height" type="text" placeholder="e.g. 5'8 ft">
+        </div>
+        <div class="col">
+          <label>Genotype (hint)</label>
+          <input id="su_genotype" type="text" placeholder="AA, AS, SS, etc.">
+        </div>
+      </div>
+
+      <label>Blood (stored as 'blood' in backend; shows as Genotype in UI)</label>
+      <input id="su_blood" type="text" placeholder="A+, O-, etc.">
+
+      <label>Location (city, details)</label>
+      <input id="su_location" type="text" placeholder="Lagos, Nigeria">
+
+      <label>Description</label>
+      <textarea id="su_desc" placeholder="Tell people a little about yourself"></textarea>
+
+      <label>Telegram ID (e.g. @dechris)</label>
+      <input id="su_telegram" type="text" placeholder="@username">
+
+      <label>WhatsApp or Email (public contact)</label>
+      <input id="su_whatsapp" type="text" placeholder="+234... or email">
+
+      <div style="display:flex; gap:8px; margin-top:8px;">
+        <div style="flex:1">
+          <label>Email (login)</label>
+          <input id="su_email" type="email" placeholder="you@example.com">
+        </div>
+        <div style="flex:1">
+          <label>Password</label>
+          <input id="su_password" type="password" placeholder="choose a password">
+        </div>
+      </div>
+
+      <label>Profile photo URL</label>
+      <input id="su_photo_url" type="url" placeholder="https://example.com/image.jpg">
+
+      <div style="display:flex; gap:8px; margin-top:12px;">
+        <label style="display:flex; align-items:center; gap:8px;">
+          <input id="agree_warn" type="checkbox"> I understand safety warnings.
+        </label>
+      </div>
+
+      <div style="display:flex; gap:8px; margin-top:12px;">
+        <button id="signupBtn" class="primary">Create account</button>
+        <button id="clearSignupBtn" class="secondary">Clear</button>
+      </div>
+
+      <div id="signup_feedback" class="hint"></div>
+    </div>
+  </section>
+
+  <!-- LOGIN -->
+  <section id="login" class="page">
+    <div class="card">
+      <h2>Login</h2>
+
+      <label>Email</label>
+      <input id="li_email" type="email">
+
+      <label>Password</label>
+      <input id="li_password" type="password">
+
+      <div style="display:flex; gap:10px; align-items:center; margin-top:8px;">
+        <label style="display:flex; align-items:center; gap:8px;">
+          <input id="remember_me" type="checkbox"> Remember me
+        </label>
+        <div style="flex:1"></div>
+        <button id="prefillBtn" class="secondary">Fill</button>
+      </div>
+
+      <div style="display:flex; gap:8px; margin-top:12px;">
+        <button id="loginBtn" class="primary">Sign in</button>
+      </div>
+
+      <div id="login_feedback" class="hint"></div>
+    </div>
+  </section>
+
+  <!-- EXPLORE -->
+  <section id="explore" class="page">
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h2>Explore</h2>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <button class="tab active" id="tab_near">
+            <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" style="width:18px;height:18px;filter:invert(100%)">
+            Near me
+          </button>
+          <button class="tab" id="tab_all">
+            <img src="https://cdn-icons-png.flaticon.com/512/709/709496.png" style="width:18px;height:18px;filter:invert(100%)">
+            Show all
+          </button>
+        </div>
+      </div>
+
+      <div style="margin-top:8px;">
+        <div class="small-muted">Tip: Tap a profile to view details. Contact info only available when logged in.</div>
+      </div>
+
+      <div id="profiles_container" style="margin-top:12px;">
+        <div class="profiles" id="profiles"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- Loading popup (only visible during actions) -->
+<div id="loadingPopup" aria-hidden="true">
+  <div class="loader-card">
+    <div class="spinner" aria-hidden="true"></div>
+    <div id="loadingText" class="small-muted">Processing...</div>
+    <div id="loadingSub" class="small-muted" style="font-size:12px">Please wait — this should only take a few seconds.</div>
+  </div>
+</div>
+
+<script>
+/* ------------------------------
+   CONFIG: put your Apps Script web app URL here
+   ------------------------------ */
+const API_URL = "YOUR_DEPLOYED_WEB_APP_URL"; // <<=== REPLACE with your script exec URL
+
+/* ------------------------------
+   Small helpers
+   ------------------------------ */
+function showLoading(text) {
+  document.getElementById('loadingText').innerText = text || 'Please wait...';
+  document.getElementById('loadingPopup').style.display = 'flex';
+}
+function hideLoading() {
+  document.getElementById('loadingPopup').style.display = 'none';
+}
+function showFeedback(id, msg, ok = true) {
+  const el = document.getElementById(id);
+  el.innerText = msg;
+  el.classList.remove(ok ? 'error' : 'success');
+  el.classList.add(ok ? 'success' : 'error');
+}
+
+/* ------------------------------
+   Page navigation + nav active
+   ------------------------------ */
+function setNavActive(id) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const el = document.getElementById(id);
+  if (el) el.classList.add('active');
+}
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const el = document.getElementById(name);
+  if (el) el.classList.add('active');
+
+  setNavActive(`nav_${name}`);
+  if (name === 'explore') {
+    loadProfiles();
+  }
+}
+
+/* ------------------------------
+   Theme toggle
+   ------------------------------ */
+function toggleMode() {
+  document.body.classList.toggle('light');
+}
+
+/* ------------------------------
+   Remember me: store credentials
+   ------------------------------ */
+function saveRemember(email, pass) {
+  localStorage.setItem('tapmeet_remember', JSON.stringify({ email, pass }));
+}
+function loadRemember() {
+  try {
+    return JSON.parse(localStorage.getItem('tapmeet_remember'));
+  } catch (e) {
+    return null;
+  }
+}
+function prefillFromRemember() {
+  const r = loadRemember();
+  if (r) {
+    document.getElementById('li_email').value = r.email;
+    document.getElementById('li_password').value = r.pass;
+    showFeedback('login_feedback', 'Credentials filled (from Remember Me)', true);
+  } else {
+    showFeedback('login_feedback', 'No saved credentials.', false);
+  }
+}
+
+/* ------------------------------
+   Tabs: near / all
+   ------------------------------ */
+let currentTab = 'near';
+function setTab(name) {
+  currentTab = name;
+  document.getElementById('tab_near').classList.toggle('active', name === 'near');
+  document.getElementById('tab_all').classList.toggle('active', name === 'all');
+  loadProfiles();
+}
+
+/* ------------------------------
+   SIGNUP logic
+   ------------------------------ */
+async function signup() {
+  const agree = document.getElementById('agree_warn').checked;
+  if (!agree) {
+    showFeedback('signup_feedback', 'Please agree to safety warning before signing up.', false);
+    return;
+  }
+
+  const name = document.getElementById('su_name').value.trim();
+  const age = document.getElementById('su_age').value.trim();
+  const height = document.getElementById('su_height').value.trim();
+  const blood = document.getElementById('su_blood').value.trim();
+  const genotype = document.getElementById('su_genotype').value.trim();
+  const location = document.getElementById('su_location').value.trim();
+  const desc = document.getElementById('su_desc').value.trim();
+  const telegram = document.getElementById('su_telegram').value.trim();
+  const whatsapp = document.getElementById('su_whatsapp').value.trim();
+  const email = document.getElementById('su_email').value.trim();
+  const password = document.getElementById('su_password').value;
+  const photoURL = document.getElementById('su_photo_url').value.trim();
+
+  if (!name || !email || !password) {
+    showFeedback('signup_feedback', 'Please provide name, email, and password.', false);
+    return;
+  }
+
+  showLoading('🚀 Creating account...');
+
+  const payload = {
+    action: "signup",
+    name, age, height, blood, genotype, location, desc, telegram, whatsapp, email, password, photo: photoURL || ""
+  };
+
+  try {
+    const resp = await fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+    const json = await resp.json();
+    hideLoading();
+    if (json && json.success) {
+      showFeedback('signup_feedback', '✅ Signup successful. Please proceed to login.', true);
+      document.getElementById('li_email').value = email;
+      showPage('login');
+    } else {
+      const msg = json && json.message ? json.message : JSON.stringify(json);
+      showFeedback('signup_feedback', '❌ Signup failed: ' + msg, false);
+    }
+  } catch (err) {
+    hideLoading();
+    showFeedback('signup_feedback', '❌ Network error: ' + err.message, false);
+  }
+}
+
+/* ------------------------------
+   LOGIN logic (with Remember Me)
+   ------------------------------ */
+async function login() {
+  const email = document.getElementById('li_email').value.trim();
+  const password = document.getElementById('li_password').value;
+  const remember = document.getElementById('remember_me').checked;
+
+  if (!email || !password) {
+    showFeedback('login_feedback', 'Please enter email & password', false);
+    return;
+  }
+
+  showLoading('🔐 Signing in...');
+
+  const payload = { action: 'login', email, password };
+
+  try {
+    const resp = await fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: { 'Content-Type': 'application/json' }
+    });
+    const json = await resp.json();
+    hideLoading();
+    if (json && json.success) {
+      const user = json.user;
+      localStorage.setItem('tapmeet_user', JSON.stringify(user));
+      if (remember) saveRemember(email, password);
+      else localStorage.removeItem('tapmeet_remember');
+
+      showFeedback('login_feedback', '✅ Welcome, ' + (user.name || user.email), true);
+      showPage('explore');
+    } else {
+      const msg = json && json.message ? json.message : JSON.stringify(json);
+      showFeedback('login_feedback', '❌ Login failed: ' + msg, false);
+    }
+  } catch (err) {
+    hideLoading();
+    showFeedback('login_feedback', '❌ Network error: ' + err.message, false);
+  }
+}
+
+/* ------------------------------
+   LOAD PROFILES
+   ------------------------------ */
+async function loadProfiles() {
+  showLoading('🔎 Loading profiles...');
+  try {
+    const resp = await fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'getProfiles' }),
+      headers: { 'Content-Type': 'application/json' }
+    });
+    const json = await resp.json();
+    hideLoading();
+    if (!json || !json.success) {
+      document.getElementById('profiles').innerHTML = '<div class="small-muted">No profiles found.</div>';
+      return;
     }
 
-    // Prefill email if remembered
-    const rememberedEmail = localStorage.getItem('email');
-    if (rememberedEmail) {
-      document.getElementById('li_email').value = rememberedEmail;
-    }
-
-    // PWA Service Worker
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-          .then(reg => console.log('Service Worker registered'))
-          .catch(err => console.log('Service Worker error:', err));
-      });
-    }
-
-    function toggleMode() {
-      document.body.classList.toggle("dark");
-      localStorage.setItem('dark', document.body.classList.contains('dark'));
-    }
-
-    function showSection(id) {
-      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-      if (id === 'explore') {
-        showTab('all');
-      }
-    }
-
-    function showTab(mode) {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      document.getElementById(mode === 'all' ? 'showall' : 'nearme').classList.add('active');
-      loadProfiles(mode);
-    }
-
-    function showLoading(text) {
-      document.getElementById("loadingText").innerText = text;
-      document.getElementById("loadingPopup").style.display = "flex";
-    }
-    function hideLoading() {
-      document.getElementById("loadingPopup").style.display = "none";
-    }
-
-    function getCurrentPosition() {
-      return new Promise((resolve, reject) => {
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(resolve, reject);
-        } else {
-          reject(new Error('Geolocation not supported'));
-        }
-      });
-    }
-
-    async function getCityFromCoords(lat, lon) {
+    let users = json.users || [];
+    if (currentTab === 'near' && navigator.geolocation) {
       try {
-        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=10`);
-        const data = await res.json();
-        return data.address.city || data.address.town || data.address.village || '';
-      } catch (err) {
-        return '';
-      }
-    }
-
-    async function signup() {
-      showLoading("🚀 Creating your TapMeet account...");
-      const data = {
-        action: "signup",
-        name: document.getElementById("su_name").value,
-        age: document.getElementById("su_age").value,
-        height: document.getElementById("su_height").value,
-        blood: document.getElementById("su_blood").value,
-        genotype: document.getElementById("su_genotype").value,
-        location: document.getElementById("su_location").value,
-        description: document.getElementById("su_desc").value,
-        telegram: document.getElementById("su_telegram").value,
-        whatsapp: document.getElementById("su_whatsapp").value,
-        email: document.getElementById("su_email").value,
-        password: document.getElementById("su_password").value,
-        photo: document.getElementById("su_photo").value
-      };
-      try {
-        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(data) });
-        const result = await res.json();
-        hideLoading();
-        document.getElementById("signup_msg").innerText = result.message || JSON.stringify(result);
-      } catch (err) {
-        hideLoading();
-        document.getElementById("signup_msg").innerText = "❌ Error: " + err.message;
-      }
-    }
-
-    async function login() {
-      showLoading("🔑 Logging into TapMeet...");
-      const email = document.getElementById("li_email").value;
-      const remember = document.getElementById("remember").checked;
-      if (remember) {
-        localStorage.setItem('email', email);
-      } else {
-        localStorage.removeItem('email');
-      }
-      const data = {
-        action: "login",
-        email: email,
-        password: document.getElementById("li_password").value
-      };
-      try {
-        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(data) });
-        const result = await res.json();
-        hideLoading();
-        if (result.success) {
-          document.getElementById("login_msg").innerText = "✅ Welcome " + result.user.name;
-          showSection("explore");
-        } else {
-          document.getElementById("login_msg").innerText = "❌ " + result.message;
-        }
-      } catch (err) {
-        hideLoading();
-        document.getElementById("login_msg").innerText = "❌ Error: " + err.message;
-      }
-    }
-
-    async function loadProfiles(mode = 'all') {
-      showLoading("🔄 Loading profiles...");
-      const container = document.getElementById("profiles");
-      container.innerHTML = "";
-      try {
-        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "getProfiles" }) });
-        const result = await res.json();
-        let users = result.success ? result.users : [];
-        if (mode === 'near') {
-          try {
-            showLoading("📍 Getting your location...");
-            const position = await getCurrentPosition();
-            const city = await getCityFromCoords(position.coords.latitude, position.coords.longitude);
-            if (city) {
-              users = users.filter(user => user.location && user.location.toLowerCase().includes(city.toLowerCase()));
-            } else {
-              container.innerHTML = "<p>Unable to detect location.</p>";
-              hideLoading();
-              return;
-            }
-          } catch (err) {
-            container.innerHTML = "<p>Location access denied or error: " + err.message + "</p>";
-            hideLoading();
-            return;
-          }
-        }
-        if (users.length) {
-          users.forEach(user => {
-            const card = document.createElement("div");
-            card.className = "profile-card";
-            card.innerHTML = `
-              <img src="${user.photo || ''}" alt="photo">
-              <h3>${user.name}, ${user.age}</h3>
-              <p>${user.description || ''}</p>
-              <p>📍 ${user.location || ''}</p>
-              <p>💬 Telegram: ${user.telegram || ''}</p>
-              <p>📱 WhatsApp: ${user.whatsapp || ''}</p>
-              <p>🩸 Blood: ${user.blood || ''}, Genotype: ${user.genotype || ''}</p>
-            `;
-            container.appendChild(card);
-          });
-        } else {
-          container.innerHTML = "<p>No profiles found.</p>";
-        }
-        hideLoading();
-      } catch (err) {
-        hideLoading();
-        container.innerHTML = "❌ Error: " + err.message;
-      }
-    }
-  </script>
-</body>
-  </html>
+        const pos = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
+        });
+        const myLat = pos.coords.latitude;
+        const myLon = pos.coords.longit
