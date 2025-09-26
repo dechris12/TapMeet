@@ -18,7 +18,6 @@
     --white:#ffffff;
   }
 
-  /* Light mode support */
   body.light {
     --bg:#f7f0ff; --card:#fff; --accent:#6a0dad; --accent-weak:#8b3bdc; --muted:#5c2b8e; --white:#111;
   }
@@ -41,17 +40,12 @@
     color:var(--muted); cursor:pointer; font-size:12px;
   }
   .nav-btn img{width:22px; height:22px; filter:invert(100%);}
-
-  /* active nav small highlight */
   .nav-btn.active { box-shadow: 0 0 0 3px rgba(106,13,173,0.12); border-color:rgba(106,13,173,0.5); color:var(--white); }
 
   .container {max-width:1100px; margin:0 auto; padding:12px; box-sizing:border-box;}
-
-  /* sections */
   .page { display:none; }
   .page.active{ display:block; }
 
-  /* form styles */
   .card { background:var(--card); border-radius:12px; padding:14px; box-shadow:0 6px 20px rgba(0,0,0,0.45); color:var(--white); }
   .row { display:flex; gap:8px; }
   .col { flex:1; }
@@ -63,11 +57,9 @@
   textarea { min-height:90px; resize:vertical; }
 
   .hint { font-size:12px; color:var(--muted); margin-top:6px; }
-
-  .primary { background:linear-gradient(90deg,var(--accent),var(--accent-weak)); color:var(--white); border:none; padding:12px 14px; border-radius:10px; cursor:pointer; font-weight:600; width:100%; }
+  .primary { background:linear-gradient(90deg,var(--accent),var--accent-weak); color:var(--white); border:none; padding:12px 14px; border-radius:10px; cursor:pointer; font-weight:600; width:100%; }
   .secondary { background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--muted); padding:8px 12px; border-radius:8px; cursor:pointer; }
 
-  /* profiles grid */
   .tabs { display:flex; gap:8px; margin-bottom:10px; align-items:center; }
   .tab { padding:8px 12px; border-radius:10px; cursor:pointer; background:transparent; border:1px solid rgba(255,255,255,0.03); color:var(--muted); display:inline-flex; gap:8px; align-items:center; }
   .tab.active { box-shadow: 0 0 0 3px rgba(106,13,173,0.08); border-color: rgba(106,13,173,0.35); color:var(--white); }
@@ -79,18 +71,15 @@
   .profile h3 { margin:8px 0 4px; font-size:16px; }
   .profile p { margin:0; font-size:13px; color:var(--muted); }
 
-  /* small icon + caption used for lots of buttons */
   .icon-btn { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:8px; border-radius:10px; background:transparent; border:none; cursor:pointer; color:var(--muted); font-size:12px; }
   .icon-btn img { width:28px; height:28px; filter:invert(100%); }
 
-  /* mobile responsiveness */
   @media (max-width:800px) {
     .profiles { grid-template-columns:1fr; }
     header .top { padding:0 8px; }
     .nav-btn { font-size:11px; min-width:56px; }
   }
 
-  /* loading popup */
   #loadingPopup {
     position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:9999;
     background:linear-gradient(180deg, rgba(5,5,10,0.5), rgba(5,5,10,0.6)); color:white;
@@ -112,13 +101,11 @@
   <div class="top">
     <div class="logo">TM</div>
     <h1>TapMeet</h1>
-
     <div class="controls">
       <button class="icon-btn" id="installBtn" title="Install TapMeet" style="display:none">
         <img src="https://cdn-icons-png.flaticon.com/512/545/545665.png" alt="install">
         <div style="font-size:11px;color:rgba(255,255,255,0.85)">Install</div>
       </button>
-
       <button class="icon-btn" id="toggleModeBtn" title="Toggle mode">
         <img src="https://cdn-icons-png.flaticon.com/512/869/869869.png" alt="mode">
         <div style="font-size:11px;color:rgba(255,255,255,0.85)">Mode</div>
@@ -133,36 +120,29 @@
       <img src="https://cdn-icons-png.flaticon.com/512/1946/1946488.png" alt="home">
       <div style="font-size:11px">Home</div>
     </button>
-
     <button class="nav-btn" id="nav_signup">
       <img src="https://cdn-icons-png.flaticon.com/512/1828/1828961.png" alt="signup">
       <div style="font-size:11px">Signup</div>
     </button>
-
     <button class="nav-btn" id="nav_login">
       <img src="https://cdn-icons-png.flaticon.com/512/295/295128.png" alt="login">
       <div style="font-size:11px">Login</div>
     </button>
-
     <button class="nav-btn" id="nav_explore">
       <img src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png" alt="explore">
       <div style="font-size:11px">Explore</div>
     </button>
   </div>
-
   <div style="display:flex; gap:8px; align-items:center;">
     <div style="font-size:12px; color:var(--muted)">TapMeet • secure prototype</div>
   </div>
 </nav>
 
 <div class="container">
-
-  <!-- HOME screen (landing + quick links) -->
   <section id="home" class="page active">
     <div class="card">
       <h2>Welcome to TapMeet</h2>
       <p class="small-muted">Find people near you. Please follow safety advice — never send money.</p>
-
       <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;">
         <button class="icon-btn" id="home_signup_btn">
           <img src="https://cdn-icons-png.flaticon.com/512/706/706164.png" alt="">
@@ -180,11 +160,9 @@
     </div>
   </section>
 
-  <!-- SIGNUP -->
   <section id="signup" class="page">
     <div class="card">
       <h2>Create an account</h2>
-
       <div class="row" style="margin-top:8px">
         <div class="col">
           <label>Full name</label>
@@ -195,7 +173,6 @@
           <input id="su_age" type="number" placeholder="e.g. 28">
         </div>
       </div>
-
       <div class="row">
         <div class="col">
           <label>Height (ft/in)</label>
@@ -206,22 +183,16 @@
           <input id="su_genotype" type="text" placeholder="AA, AS, SS, etc.">
         </div>
       </div>
-
       <label>Blood (stored as 'blood' in backend; shows as Genotype in UI)</label>
       <input id="su_blood" type="text" placeholder="A+, O-, etc.">
-
       <label>Location (city, details)</label>
       <input id="su_location" type="text" placeholder="Lagos, Nigeria">
-
       <label>Description</label>
       <textarea id="su_desc" placeholder="Tell people a little about yourself"></textarea>
-
       <label>Telegram ID (e.g. @dechris)</label>
       <input id="su_telegram" type="text" placeholder="@username">
-
       <label>WhatsApp or Email (public contact)</label>
       <input id="su_whatsapp" type="text" placeholder="+234... or email">
-
       <div style="display:flex; gap:8px; margin-top:8px;">
         <div style="flex:1">
           <label>Email (login)</label>
@@ -232,36 +203,28 @@
           <input id="su_password" type="password" placeholder="choose a password">
         </div>
       </div>
-
       <label>Profile photo URL</label>
       <input id="su_photo_url" type="url" placeholder="https://example.com/image.jpg">
-
       <div style="display:flex; gap:8px; margin-top:12px;">
         <label style="display:flex; align-items:center; gap:8px;">
           <input id="agree_warn" type="checkbox"> I understand safety warnings.
         </label>
       </div>
-
       <div style="display:flex; gap:8px; margin-top:12px;">
         <button id="signupBtn" class="primary">Create account</button>
         <button id="clearSignupBtn" class="secondary">Clear</button>
       </div>
-
       <div id="signup_feedback" class="hint"></div>
     </div>
   </section>
 
-  <!-- LOGIN -->
   <section id="login" class="page">
     <div class="card">
       <h2>Login</h2>
-
       <label>Email</label>
       <input id="li_email" type="email">
-
       <label>Password</label>
       <input id="li_password" type="password">
-
       <div style="display:flex; gap:10px; align-items:center; margin-top:8px;">
         <label style="display:flex; align-items:center; gap:8px;">
           <input id="remember_me" type="checkbox"> Remember me
@@ -269,16 +232,13 @@
         <div style="flex:1"></div>
         <button id="prefillBtn" class="secondary">Fill</button>
       </div>
-
       <div style="display:flex; gap:8px; margin-top:12px;">
         <button id="loginBtn" class="primary">Sign in</button>
       </div>
-
       <div id="login_feedback" class="hint"></div>
     </div>
   </section>
 
-  <!-- EXPLORE -->
   <section id="explore" class="page">
     <div class="card">
       <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -294,20 +254,16 @@
           </button>
         </div>
       </div>
-
       <div style="margin-top:8px;">
         <div class="small-muted">Tip: Tap a profile to view details. Contact info only available when logged in.</div>
       </div>
-
       <div id="profiles_container" style="margin-top:12px;">
         <div class="profiles" id="profiles"></div>
       </div>
     </div>
   </section>
-
 </div>
 
-<!-- Loading popup (only visible during actions) -->
 <div id="loadingPopup" aria-hidden="true">
   <div class="loader-card">
     <div class="spinner" aria-hidden="true"></div>
@@ -318,124 +274,175 @@
 
 <script>
 /* ------------------------------
-   CONFIG: put your Apps Script web app URL here
+   CONFIG
    ------------------------------ */
-const API_URL = "YOUR_DEPLOYED_WEB_APP_URL"; // <<=== REPLACE with your script exec URL
+const API_URL = "YOUR_DEPLOYED_WEB_APP_URL"; // REPLACE with your Google Apps Script web app URL
 
 /* ------------------------------
-   Small helpers
+   Helpers
    ------------------------------ */
 function showLoading(text) {
-  document.getElementById('loadingText').innerText = text || 'Please wait...';
-  document.getElementById('loadingPopup').style.display = 'flex';
+  try {
+    const loadingText = document.getElementById('loadingText');
+    if (loadingText) loadingText.innerText = text || 'Please wait...';
+    const popup = document.getElementById('loadingPopup');
+    if (popup) popup.style.display = 'flex';
+  } catch (e) {
+    console.error('Error in showLoading:', e);
+  }
 }
+
 function hideLoading() {
-  document.getElementById('loadingPopup').style.display = 'none';
+  try {
+    const popup = document.getElementById('loadingPopup');
+    if (popup) popup.style.display = 'none';
+  } catch (e) {
+    console.error('Error in hideLoading:', e);
+  }
 }
+
 function showFeedback(id, msg, ok = true) {
-  const el = document.getElementById(id);
-  el.innerText = msg;
-  el.classList.remove(ok ? 'error' : 'success');
-  el.classList.add(ok ? 'success' : 'error');
-}
-
-/* ------------------------------
-   Page navigation + nav active
-   ------------------------------ */
-function setNavActive(id) {
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  const el = document.getElementById(id);
-  if (el) el.classList.add('active');
-}
-function showPage(name) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  const el = document.getElementById(name);
-  if (el) el.classList.add('active');
-
-  setNavActive(`nav_${name}`);
-  if (name === 'explore') {
-    loadProfiles();
+  try {
+    const el = document.getElementById(id);
+    if (!el) throw new Error(`Element with ID ${id} not found`);
+    el.innerText = msg;
+    el.classList.remove(ok ? 'error' : 'success');
+    el.classList.add(ok ? 'success' : 'error');
+  } catch (e) {
+    console.error('Error in showFeedback:', e);
   }
 }
 
 /* ------------------------------
-   Theme toggle
+   Page Navigation
    ------------------------------ */
-function toggleMode() {
-  document.body.classList.toggle('light');
+function setNavActive(id) {
+  try {
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    const el = document.getElementById(id);
+    if (el) el.classList.add('active');
+  } catch (e) {
+    console.error('Error in setNavActive:', e);
+  }
+}
+
+function showPage(name) {
+  try {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const el = document.getElementById(name);
+    if (el) el.classList.add('active');
+    setNavActive(`nav_${name}`);
+    if (name === 'explore') {
+      loadProfiles();
+    }
+  } catch (e) {
+    console.error('Error in showPage:', e);
+  }
 }
 
 /* ------------------------------
-   Remember me: store credentials
+   Theme Toggle
+   ------------------------------ */
+function toggleMode() {
+  try {
+    document.body.classList.toggle('light');
+  } catch (e) {
+    console.error('Error in toggleMode:', e);
+  }
+}
+
+/* ------------------------------
+   Remember Me
    ------------------------------ */
 function saveRemember(email, pass) {
-  localStorage.setItem('tapmeet_remember', JSON.stringify({ email, pass }));
+  try {
+    localStorage.setItem('tapmeet_remember', JSON.stringify({ email, pass }));
+  } catch (e) {
+    console.error('Error in saveRemember:', e);
+  }
 }
+
 function loadRemember() {
   try {
-    return JSON.parse(localStorage.getItem('tapmeet_remember'));
+    const data = localStorage.getItem('tapmeet_remember');
+    return data ? JSON.parse(data) : null;
   } catch (e) {
+    console.error('Error in loadRemember:', e);
     return null;
   }
 }
+
 function prefillFromRemember() {
-  const r = loadRemember();
-  if (r) {
-    document.getElementById('li_email').value = r.email;
-    document.getElementById('li_password').value = r.pass;
-    showFeedback('login_feedback', 'Credentials filled (from Remember Me)', true);
-  } else {
-    showFeedback('login_feedback', 'No saved credentials.', false);
+  try {
+    const r = loadRemember();
+    if (r) {
+      document.getElementById('li_email').value = r.email;
+      document.getElementById('li_password').value = r.pass;
+      showFeedback('login_feedback', 'Credentials filled (from Remember Me)', true);
+    } else {
+      showFeedback('login_feedback', 'No saved credentials.', false);
+    }
+  } catch (e) {
+    console.error('Error in prefillFromRemember:', e);
   }
 }
 
 /* ------------------------------
-   Tabs: near / all
+   Tabs
    ------------------------------ */
 let currentTab = 'near';
 function setTab(name) {
-  currentTab = name;
-  document.getElementById('tab_near').classList.toggle('active', name === 'near');
-  document.getElementById('tab_all').classList.toggle('active', name === 'all');
-  loadProfiles();
+  try {
+    currentTab = name;
+    document.getElementById('tab_near').classList.toggle('active', name === 'near');
+    document.getElementById('tab_all').classList.toggle('active', name === 'all');
+    loadProfiles();
+  } catch (e) {
+    console.error('Error in setTab:', e);
+  }
 }
 
 /* ------------------------------
-   SIGNUP logic
+   Signup Logic
    ------------------------------ */
 async function signup() {
-  const agree = document.getElementById('agree_warn').checked;
-  if (!agree) {
-    showFeedback('signup_feedback', 'Please agree to safety warning before signing up.', false);
-    return;
-  }
-
-  const name = document.getElementById('su_name').value.trim();
-  const age = document.getElementById('su_age').value.trim();
-  const height = document.getElementById('su_height').value.trim();
-  const blood = document.getElementById('su_blood').value.trim();
-  const genotype = document.getElementById('su_genotype').value.trim();
-  const location = document.getElementById('su_location').value.trim();
-  const desc = document.getElementById('su_desc').value.trim();
-  const telegram = document.getElementById('su_telegram').value.trim();
-  const whatsapp = document.getElementById('su_whatsapp').value.trim();
-  const email = document.getElementById('su_email').value.trim();
-  const password = document.getElementById('su_password').value;
-  const photoURL = document.getElementById('su_photo_url').value.trim();
-
-  if (!name || !email || !password) {
-    showFeedback('signup_feedback', 'Please provide name, email, and password.', false);
-    return;
-  }
-
-  showLoading('🚀 Creating account...');
-
-  const payload = {
-    action: "signup",
-    name, age, height, blood, genotype, location, desc, telegram, whatsapp, email, password, photo: photoURL || ""
-  };
-
   try {
+    if (!API_URL || API_URL === "YOUR_DEPLOYED_WEB_APP_URL") {
+      showFeedback('signup_feedback', 'API URL not configured.', false);
+      return;
+    }
+
+    const agree = document.getElementById('agree_warn').checked;
+    if (!agree) {
+      showFeedback('signup_feedback', 'Please agree to safety warning before signing up.', false);
+      return;
+    }
+
+    const name = document.getElementById('su_name').value.trim();
+    const age = document.getElementById('su_age').value.trim();
+    const height = document.getElementById('su_height').value.trim();
+    const blood = document.getElementById('su_blood').value.trim();
+    const genotype = document.getElementById('su_genotype').value.trim();
+    const location = document.getElementById('su_location').value.trim();
+    const desc = document.getElementById('su_desc').value.trim();
+    const telegram = document.getElementById('su_telegram').value.trim();
+    const whatsapp = document.getElementById('su_whatsapp').value.trim();
+    const email = document.getElementById('su_email').value.trim();
+    const password = document.getElementById('su_password').value;
+    const photoURL = document.getElementById('su_photo_url').value.trim();
+
+    if (!name || !email || !password) {
+      showFeedback('signup_feedback', 'Please provide name, email, and password.', false);
+      return;
+    }
+
+    showLoading('🚀 Creating account...');
+
+    const payload = {
+      action: "signup",
+      name, age, height, blood, genotype, location, desc, telegram, whatsapp, email, password, photo: photoURL || ""
+    };
+
     const resp = await fetch(API_URL, {
       method: 'POST',
       body: JSON.stringify(payload),
@@ -452,35 +459,42 @@ async function signup() {
       const msg = json && json.message ? json.message : JSON.stringify(json);
       showFeedback('signup_feedback', '❌ Signup failed: ' + msg, false);
     }
-  } catch (err) {
+  } catch (e) {
     hideLoading();
-    showFeedback('signup_feedback', '❌ Network error: ' + err.message, false);
+    showFeedback('signup_feedback', '❌ Error: ' + e.message, false);
+    console.error('Error in signup:', e);
   }
 }
 
 /* ------------------------------
-   LOGIN logic (with Remember Me)
+   Login Logic
    ------------------------------ */
 async function login() {
-  const email = document.getElementById('li_email').value.trim();
-  const password = document.getElementById('li_password').value;
-  const remember = document.getElementById('remember_me').checked;
-
-  if (!email || !password) {
-    showFeedback('login_feedback', 'Please enter email & password', false);
-    return;
-  }
-
-  showLoading('🔐 Signing in...');
-
-  const payload = { action: 'login', email, password };
-
   try {
+    if (!API_URL || API_URL === "YOUR_DEPLOYED_WEB_APP_URL") {
+      showFeedback('login_feedback', 'API URL not configured.', false);
+      return;
+    }
+
+    const email = document.getElementById('li_email').value.trim();
+    const password = document.getElementById('li_password').value;
+    const remember = document.getElementById('remember_me').checked;
+
+    if (!email || !password) {
+      showFeedback('login_feedback', 'Please enter email & password', false);
+      return;
+    }
+
+    showLoading('🔐 Signing in...');
+
+    const payload = { action: 'login', email, password };
+
     const resp = await fetch(API_URL, {
       method: 'POST',
       body: JSON.stringify(payload),
       headers: { 'Content-Type': 'application/json' }
     });
+
     const json = await resp.json();
     hideLoading();
     if (json && json.success) {
@@ -495,23 +509,30 @@ async function login() {
       const msg = json && json.message ? json.message : JSON.stringify(json);
       showFeedback('login_feedback', '❌ Login failed: ' + msg, false);
     }
-  } catch (err) {
+  } catch (e) {
     hideLoading();
-    showFeedback('login_feedback', '❌ Network error: ' + err.message, false);
+    showFeedback('login_feedback', '❌ Error: ' + e.message, false);
+    console.error('Error in login:', e);
   }
 }
 
 /* ------------------------------
-   LOAD PROFILES
+   Load Profiles
    ------------------------------ */
 async function loadProfiles() {
-  showLoading('🔎 Loading profiles...');
   try {
+    if (!API_URL || API_URL === "YOUR_DEPLOYED_WEB_APP_URL") {
+      document.getElementById('profiles').innerHTML = '<div class="error">API URL not configured.</div>';
+      return;
+    }
+
+    showLoading('🔎 Loading profiles...');
     const resp = await fetch(API_URL, {
       method: 'POST',
       body: JSON.stringify({ action: 'getProfiles' }),
       headers: { 'Content-Type': 'application/json' }
     });
+
     const json = await resp.json();
     hideLoading();
     if (!json || !json.success) {
@@ -526,4 +547,25 @@ async function loadProfiles() {
           navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
         });
         const myLat = pos.coords.latitude;
-        const myLon = pos.coords.longit
+        const myLon = pos.coords.longitude;
+        users = users.map(u => {
+          let distance = null;
+          if (u.location && typeof u.location === 'string' && u.location.match(/^-?\d+(\.\d+)?\s*,\s*-?\d+(\.\d+)?$/)) {
+            const parts = u.location.split(',').map(s => parseFloat(s.trim()));
+            const lat = parts[0], lon = parts[1];
+            distance = haversineDistance(myLat, myLon, lat, lon);
+          }
+          return { ...u, distance };
+        }).filter(u => u.distance !== null).sort((a, b) => a.distance - b.distance);
+        if (users.length === 0) {
+          users = json.users;
+        }
+      } catch (e) {
+        console.error('Geolocation error:', e);
+        users = json.users;
+      }
+    }
+
+    if (currentTab === 'all') users = json.users;
+    renderProfiles(users);
+  } catch (e) {
