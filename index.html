@@ -3,24 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <title>💜 TapMeet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- ✅ Responsive -->
   <style>
     body { font-family: Arial, sans-serif; margin:0; background:#f7f0ff; color:#222; }
-    header { background:#6a0dad; color:white; text-align:center; padding:15px; }
-    nav { background:#8a2be2; display:flex; justify-content:center; gap:15px; padding:10px; }
-    nav button { background:white; color:#6a0dad; border:none; padding:10px 15px; border-radius:20px; cursor:pointer; }
+    header { background:#6a0dad; color:white; text-align:center; padding:15px; position:sticky; top:0; }
+    nav { background:#8a2be2; display:flex; justify-content:center; flex-wrap:wrap; gap:10px; padding:10px; }
+    nav button { background:white; color:#6a0dad; border:none; padding:10px 15px; border-radius:20px; cursor:pointer; font-size:14px; }
     nav button:hover { background:#eee; }
-    .section { display:none; padding:20px; }
+    .section { display:none; padding:20px; max-width:600px; margin:auto; }
     .active { display:block; }
-    input, textarea { width:100%; padding:8px; margin:5px 0; border-radius:5px; border:1px solid #ccc; }
-    button.main-btn { background:#6a0dad; color:white; border:none; padding:10px; border-radius:10px; cursor:pointer; }
+    input, textarea { width:100%; padding:10px; margin:6px 0; border-radius:5px; border:1px solid #ccc; font-size:14px; }
+    button.main-btn { background:#6a0dad; color:white; border:none; padding:12px; border-radius:10px; cursor:pointer; font-size:15px; width:100%; }
     button.main-btn:hover { background:#500a96; }
     .profile-card { background:white; border-radius:10px; padding:15px; margin:10px 0; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
     .profile-card img { width:100%; max-height:200px; object-fit:cover; border-radius:10px; }
+    /* Dark mode */
     .dark { background:#121212; color:white; }
     .dark header { background:#3c0a64; }
     .dark nav { background:#500a96; }
+    .dark input, .dark textarea { background:#1e1e1e; color:white; border:1px solid #555; }
     .dark .profile-card { background:#1e1e1e; color:white; }
-    .toggle { position:absolute; right:20px; top:20px; cursor:pointer; }
+    .toggle { position:absolute; right:20px; top:20px; cursor:pointer; font-size:20px; }
+    /* Loading Popup */
+    #loadingPopup {
+      display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+      background:rgba(0,0,0,0.8); color:white; display:flex;
+      align-items:center; justify-content:center; flex-direction:column;
+      z-index:2000; text-align:center;
+    }
+    .spinner {
+      border:6px solid #444; border-top:6px solid #6a0dad;
+      border-radius:50%; width:60px; height:60px;
+      animation: spin 1s linear infinite; margin-bottom:20px;
+    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    /* Mobile friendly */
+    @media (max-width:600px) {
+      nav button { font-size:12px; padding:8px; }
+      input, textarea { font-size:13px; }
+      button.main-btn { font-size:14px; }
+    }
   </style>
 </head>
 <body>
@@ -35,24 +57,26 @@
     <button onclick="showSection('explore')">Explore</button>
   </nav>
 
+  <!-- Signup -->
   <div id="signup" class="section active">
     <h2>Create Account</h2>
-    <input id="su_name" placeholder="Name">
-    <input id="su_age" placeholder="Age">
-    <input id="su_height" placeholder="Height">
-    <input id="su_blood" placeholder="Blood Group">
-    <input id="su_genotype" placeholder="Genotype">
+    <input id="su_name" placeholder="Name" required>
+    <input id="su_age" placeholder="Age" required>
+    <input id="su_height" placeholder="Height" required>
+    <input id="su_blood" placeholder="Blood Group" required>
+    <input id="su_genotype" placeholder="Genotype" required>
     <input id="su_location" placeholder="Location">
     <textarea id="su_desc" placeholder="Description"></textarea>
     <input id="su_telegram" placeholder="Telegram">
     <input id="su_whatsapp" placeholder="WhatsApp">
-    <input id="su_email" placeholder="Email">
-    <input id="su_password" type="password" placeholder="Password">
+    <input id="su_email" type="email" placeholder="Email" required>
+    <input id="su_password" type="password" placeholder="Password" required>
     <input id="su_photo" placeholder="Photo URL">
     <button class="main-btn" onclick="signup()">Sign Up</button>
     <p id="signup_msg"></p>
   </div>
 
+  <!-- Login -->
   <div id="login" class="section">
     <h2>Login</h2>
     <input id="li_email" placeholder="Email">
@@ -61,13 +85,20 @@
     <p id="login_msg"></p>
   </div>
 
+  <!-- Explore -->
   <div id="explore" class="section">
     <h2>Explore Profiles</h2>
     <div id="profiles"></div>
   </div>
 
+  <!-- Futuristic Loading Popup -->
+  <div id="loadingPopup">
+    <div class="spinner"></div>
+    <h3 id="loadingText">Please wait...</h3>
+  </div>
+
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbzA9ReKAtIBXOU4ySInm3a06-hmTBZ11dqBqjIfPEYKVrFxTo2X0Ylyi9vD9XMzrzQ/exec"; // replace with deployed script URL
+    const API_URL = "YOUR_DEPLOYED_WEB_APP_URL"; // 🔹 Replace with your script exec link
 
     function toggleMode() {
       document.body.classList.toggle("dark");
@@ -79,7 +110,16 @@
       if (id === 'explore') loadProfiles();
     }
 
+    function showLoading(text) {
+      document.getElementById("loadingText").innerText = text;
+      document.getElementById("loadingPopup").style.display = "flex";
+    }
+    function hideLoading() {
+      document.getElementById("loadingPopup").style.display = "none";
+    }
+
     async function signup() {
+      showLoading("🚀 Creating your TapMeet account...");
       const data = {
         action: "signup",
         name: document.getElementById("su_name").value,
@@ -95,47 +135,67 @@
         password: document.getElementById("su_password").value,
         photo: document.getElementById("su_photo").value
       };
-      const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(data) });
-      const result = await res.json();
-      document.getElementById("signup_msg").innerText = result.message;
+      try {
+        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(data) });
+        const result = await res.json();
+        hideLoading();
+        document.getElementById("signup_msg").innerText = result.message || JSON.stringify(result);
+      } catch (err) {
+        hideLoading();
+        document.getElementById("signup_msg").innerText = "❌ Error: " + err.message;
+      }
     }
 
     async function login() {
+      showLoading("🔑 Logging into TapMeet...");
       const data = {
         action: "login",
         email: document.getElementById("li_email").value,
         password: document.getElementById("li_password").value
       };
-      const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(data) });
-      const result = await res.json();
-      if (result.success) {
-        document.getElementById("login_msg").innerText = "Welcome " + result.user.name;
-      } else {
-        document.getElementById("login_msg").innerText = result.message;
+      try {
+        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(data) });
+        const result = await res.json();
+        hideLoading();
+        if (result.success) {
+          document.getElementById("login_msg").innerText = "✅ Welcome " + result.user.name;
+          showSection("explore");
+        } else {
+          document.getElementById("login_msg").innerText = "❌ " + result.message;
+        }
+      } catch (err) {
+        hideLoading();
+        document.getElementById("login_msg").innerText = "❌ Error: " + err.message;
       }
     }
 
     async function loadProfiles() {
       const data = { action: "getProfiles" };
-      const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(data) });
-      const result = await res.json();
-      if (result.success) {
+      try {
+        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(data) });
+        const result = await res.json();
         const container = document.getElementById("profiles");
         container.innerHTML = "";
-        result.users.forEach(user => {
-          const card = document.createElement("div");
-          card.className = "profile-card";
-          card.innerHTML = `
-            <img src="${user.photo || ''}" alt="photo">
-            <h3>${user.name}, ${user.age}</h3>
-            <p>${user.description}</p>
-            <p>📍 ${user.location}</p>
-            <p>💬 Telegram: ${user.telegram}</p>
-            <p>📱 WhatsApp: ${user.whatsapp}</p>
-            <p>🩸 Blood: ${user.blood}, Genotype: ${user.genotype}</p>
-          `;
-          container.appendChild(card);
-        });
+        if (result.success) {
+          result.users.forEach(user => {
+            const card = document.createElement("div");
+            card.className = "profile-card";
+            card.innerHTML = `
+              <img src="${user.photo || ''}" alt="photo">
+              <h3>${user.name}, ${user.age}</h3>
+              <p>${user.description || ''}</p>
+              <p>📍 ${user.location || ''}</p>
+              <p>💬 Telegram: ${user.telegram || ''}</p>
+              <p>📱 WhatsApp: ${user.whatsapp || ''}</p>
+              <p>🩸 Blood: ${user.blood || ''}, Genotype: ${user.genotype || ''}</p>
+            `;
+            container.appendChild(card);
+          });
+        } else {
+          container.innerHTML = "<p>No profiles found.</p>";
+        }
+      } catch (err) {
+        document.getElementById("profiles").innerHTML = "❌ Error: " + err.message;
       }
     }
   </script>
