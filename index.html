@@ -2,302 +2,142 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TapMeet 💜</title>
+  <title>💜 TapMeet</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0; padding: 0;
-      background: #0a001a;
-      color: #eee;
-      transition: background 0.3s, color 0.3s;
-    }
-    body.light {
-      background: #f6f6f6;
-      color: #222;
-    }
-    header {
-      background: #4b0082;
-      color: white;
-      padding: 15px;
-      text-align: center;
-      font-size: 24px;
-      font-weight: bold;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.6);
-    }
-    .logo { height: 32px; vertical-align: middle; margin-right: 8px; }
-    nav {
-      background: #120029;
-      display: flex; justify-content: space-around;
-      padding: 10px; border-bottom: 1px solid #2d0b52;
-      flex-wrap: wrap;
-    }
-    nav button {
-      background: none; border: none;
-      font-size: 12px; color: #aaa;
-      cursor: pointer; text-align: center;
-      flex: 1; max-width: 80px;
-      margin: 5px;
-    }
-    nav button img {
-      display: block; margin: 0 auto;
-      width: 26px; height: 26px;
-      filter: invert(90%);
-    }
-    section { display: none; padding: 20px; }
-    section.active { display: block; }
-    form input, form select, form textarea {
-      display: block; width: 100%;
-      margin: 10px 0; padding: 10px;
-      border-radius: 8px; border: 1px solid #333;
-      background: #1e0036; color: #eee;
-      box-sizing: border-box;
-    }
-    body.light form input,
-    body.light form textarea {
-      background: #fff; color: #000;
-      border: 1px solid #bbb;
-    }
-    form button {
-      background: #6a0dad;
-      color: white; border: none;
-      padding: 12px; border-radius: 8px;
-      cursor: pointer; width: 100%;
-    }
-    .profile-card {
-      background: #1a002e;
-      padding: 15px; border-radius: 12px;
-      margin: 15px 0;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.4);
-      position: relative;
-    }
-    body.light .profile-card {
-      background: #fff;
-      color: #000;
-    }
-    .profile-card img {
-      width: 100%; border-radius: 12px;
-      max-height: 320px;
-      object-fit: cover;
-    }
-    .location-tag {
-      position: absolute; top: 10px; left: 10px;
-      background: rgba(0,0,0,0.6);
-      color: #fff; font-size: 12px;
-      padding: 4px 8px; border-radius: 8px;
-      display: flex; align-items: center;
-    }
-    .location-tag img {
-      width: 14px; height: 14px; margin-right: 4px;
-      filter: invert(100%);
-    }
-    .settings-btn, .logout-btn {
-      margin-top: 10px;
-      background: #4b0082; color: white;
-      border: none; padding: 10px;
-      border-radius: 8px; cursor: pointer;
-      width: 100%;
-    }
-    #modeToggle {
-      position: fixed; bottom: 15px; right: 15px;
-      padding: 10px;
-      background: #4b0082; color: #fff;
-      border: none; border-radius: 50%;
-      cursor: pointer;
-      width: 50px; height: 50px;
-    }
+    body { font-family: Arial, sans-serif; margin:0; background:#f7f0ff; color:#222; }
+    header { background:#6a0dad; color:white; text-align:center; padding:15px; }
+    nav { background:#8a2be2; display:flex; justify-content:center; gap:15px; padding:10px; }
+    nav button { background:white; color:#6a0dad; border:none; padding:10px 15px; border-radius:20px; cursor:pointer; }
+    nav button:hover { background:#eee; }
+    .section { display:none; padding:20px; }
+    .active { display:block; }
+    input, textarea { width:100%; padding:8px; margin:5px 0; border-radius:5px; border:1px solid #ccc; }
+    button.main-btn { background:#6a0dad; color:white; border:none; padding:10px; border-radius:10px; cursor:pointer; }
+    button.main-btn:hover { background:#500a96; }
+    .profile-card { background:white; border-radius:10px; padding:15px; margin:10px 0; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+    .profile-card img { width:100%; max-height:200px; object-fit:cover; border-radius:10px; }
+    .dark { background:#121212; color:white; }
+    .dark header { background:#3c0a64; }
+    .dark nav { background:#500a96; }
+    .dark .profile-card { background:#1e1e1e; color:white; }
+    .toggle { position:absolute; right:20px; top:20px; cursor:pointer; }
   </style>
 </head>
 <body>
+  <header>
+    <h1>💜 TapMeet</h1>
+    <span class="toggle" onclick="toggleMode()">🌓</span>
+  </header>
 
-<header>
-  <img src="logo.png" class="logo"> TapMeet 💜
-</header>
+  <nav>
+    <button onclick="showSection('signup')">Signup</button>
+    <button onclick="showSection('login')">Login</button>
+    <button onclick="showSection('explore')">Explore</button>
+  </nav>
 
-<nav id="navBar">
-  <button onclick="showSection('login')" id="loginBtn">
-    <img src="https://cdn-icons-png.flaticon.com/512/295/295128.png">
-    Login
-  </button>
-  <button onclick="showSection('signup')" id="signupBtn">
-    <img src="https://cdn-icons-png.flaticon.com/512/1828/1828961.png">
-    Signup
-  </button>
-  <button onclick="showSection('explore')">
-    <img src="https://cdn-icons-png.flaticon.com/512/1946/1946488.png">
-    Explore
-  </button>
-  <button onclick="showSection('profile')">
-    <img src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png">
-    Profile
-  </button>
-</nav>
+  <div id="signup" class="section active">
+    <h2>Create Account</h2>
+    <input id="su_name" placeholder="Name">
+    <input id="su_age" placeholder="Age">
+    <input id="su_height" placeholder="Height">
+    <input id="su_blood" placeholder="Blood Group">
+    <input id="su_genotype" placeholder="Genotype">
+    <input id="su_location" placeholder="Location">
+    <textarea id="su_desc" placeholder="Description"></textarea>
+    <input id="su_telegram" placeholder="Telegram">
+    <input id="su_whatsapp" placeholder="WhatsApp">
+    <input id="su_email" placeholder="Email">
+    <input id="su_password" type="password" placeholder="Password">
+    <input id="su_photo" placeholder="Photo URL">
+    <button class="main-btn" onclick="signup()">Sign Up</button>
+    <p id="signup_msg"></p>
+  </div>
 
-<!-- Login Screen -->
-<section id="login" class="active">
-  <h2>Login to TapMeet</h2>
-  <form id="loginForm">
-    <input type="email" id="loginEmail" placeholder="Email" required>
-    <input type="password" id="loginPassword" placeholder="Password" required>
-    <button type="submit">Login</button>
-  </form>
-</section>
+  <div id="login" class="section">
+    <h2>Login</h2>
+    <input id="li_email" placeholder="Email">
+    <input id="li_password" type="password" placeholder="Password">
+    <button class="main-btn" onclick="login()">Login</button>
+    <p id="login_msg"></p>
+  </div>
 
-<!-- Signup Screen -->
-<section id="signup">
-  <h2>Create Your Account</h2>
-  <form id="signupForm">
-    <input type="text" id="name" placeholder="Full Name" required>
-    <input type="number" id="age" placeholder="Age" required>
-    <input type="text" id="height" placeholder="Height (e.g. 5'8 ft)" required>
-    <input type="text" id="blood" placeholder="Genotype" required>
-    <textarea id="desc" placeholder="Write a short description" required></textarea>
-    <input type="url" id="photo" placeholder="Photo URL (paste link)" required>
-    <input type="email" id="email" placeholder="Email" required>
-    <input type="password" id="password" placeholder="Password" required>
-    <input type="text" id="telegram" placeholder="Telegram ID (e.g. @dechris)" required>
-    <button type="submit">Sign Up</button>
-  </form>
-</section>
+  <div id="explore" class="section">
+    <h2>Explore Profiles</h2>
+    <div id="profiles"></div>
+  </div>
 
-<!-- Explore Screen -->
-<section id="explore">
-  <h2>Meet New People</h2>
-  <div id="profiles"></div>
-</section>
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbzA9ReKAtIBXOU4ySInm3a06-hmTBZ11dqBqjIfPEYKVrFxTo2X0Ylyi9vD9XMzrzQ/exec"; // replace with deployed script URL
 
-<!-- Profile Screen -->
-<section id="profile">
-  <h2>My Profile</h2>
-  <div id="myProfile">Loading...</div>
-</section>
-
-<!-- Mode toggle -->
-<button id="modeToggle">🌙</button>
-
-<script>
-  const API_URL = "YOUR_DEPLOYED_APPSCRIPT_URL"; // replace with your script URL
-
-  function showSection(id) {
-    document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
-    document.getElementById(id).classList.add("active");
-  }
-
-  function updateNav() {
-    const user = JSON.parse(localStorage.getItem("user"));
-    document.getElementById("loginBtn").style.display = user ? "none" : "inline-block";
-    document.getElementById("signupBtn").style.display = user ? "none" : "inline-block";
-  }
-
-  // Signup
-  document.getElementById("signupForm").addEventListener("submit", async e => {
-    e.preventDefault();
-    const data = {
-      action: "signup",
-      name: document.getElementById("name").value,
-      age: document.getElementById("age").value,
-      height: document.getElementById("height").value,
-      blood: document.getElementById("blood").value,
-      desc: document.getElementById("desc").value,
-      email: document.getElementById("email").value,
-      password: document.getElementById("password").value,
-      telegram: document.getElementById("telegram").value,
-      photo: document.getElementById("photo").value
-    };
-    const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(data) });
-    const msg = await res.text();
-    alert(msg);
-    if (msg.includes("Signup successful")) {
-      showSection("login");
+    function toggleMode() {
+      document.body.classList.toggle("dark");
     }
-  });
 
-  // Login
-  document.getElementById("loginForm").addEventListener("submit", async e => {
-    e.preventDefault();
-    const data = {
-      action: "login",
-      email: document.getElementById("loginEmail").value,
-      password: document.getElementById("loginPassword").value
-    };
-    const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(data) });
-    const user = await res.json();
-    if (user.success) {
-      localStorage.setItem("user", JSON.stringify(user));
-      updateNav();
-      loadProfiles();
-      loadMyProfile();
-      showSection("explore");
-    } else {
-      alert("Invalid login");
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      if (id === 'explore') loadProfiles();
     }
-  });
 
-  async function loadProfiles() {
-    const res = await fetch(API_URL + "?action=getProfiles");
-    const users = await res.json();
-    localStorage.setItem("profiles", JSON.stringify(users));
-    renderProfiles(users);
-  }
-
-  function renderProfiles(users) {
-    const loggedIn = !!localStorage.getItem("user");
-    const container = document.getElementById("profiles");
-    container.innerHTML = "";
-    users.forEach(u => {
-      container.innerHTML += `
-        <div class="profile-card">
-          <div class="location-tag">
-            <img src="https://cdn-icons-png.flaticon.com/512/535/535239.png">
-            ${u.location || "Unknown"}
-          </div>
-          <img src="${u.photo}">
-          <h3>${u.name}, ${u.age || ""}</h3>
-          ${loggedIn ? `<p>Genotype: ${u.blood} | Height: ${u.height}</p><p>"${u.desc}"</p>` : ""}
-        </div>
-      `;
-    });
-  }
-
-  async function loadMyProfile() {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (!user) {
-      document.getElementById("myProfile").innerHTML = `
-        <button onclick="showSection('login')">Login</button>
-        <button onclick="showSection('signup')">Signup</button>
-      `;
-      return;
+    async function signup() {
+      const data = {
+        action: "signup",
+        name: document.getElementById("su_name").value,
+        age: document.getElementById("su_age").value,
+        height: document.getElementById("su_height").value,
+        blood: document.getElementById("su_blood").value,
+        genotype: document.getElementById("su_genotype").value,
+        location: document.getElementById("su_location").value,
+        description: document.getElementById("su_desc").value,
+        telegram: document.getElementById("su_telegram").value,
+        whatsapp: document.getElementById("su_whatsapp").value,
+        email: document.getElementById("su_email").value,
+        password: document.getElementById("su_password").value,
+        photo: document.getElementById("su_photo").value
+      };
+      const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(data) });
+      const result = await res.json();
+      document.getElementById("signup_msg").innerText = result.message;
     }
-    document.getElementById("myProfile").innerHTML = `
-      <div class="profile-card">
-        <img src="${user.photo}">
-        <h3>${user.name}, ${user.age}</h3>
-        <p>Genotype: ${user.blood} | Height: ${user.height}</p>
-        <p>"${user.desc}"</p>
-        <button class="logout-btn" onclick="logout()">Logout</button>
-      </div>
-    `;
-  }
 
-  function logout() {
-    localStorage.removeItem("user");
-    updateNav();
-    loadMyProfile();
-    showSection("login");
-  }
+    async function login() {
+      const data = {
+        action: "login",
+        email: document.getElementById("li_email").value,
+        password: document.getElementById("li_password").value
+      };
+      const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(data) });
+      const result = await res.json();
+      if (result.success) {
+        document.getElementById("login_msg").innerText = "Welcome " + result.user.name;
+      } else {
+        document.getElementById("login_msg").innerText = result.message;
+      }
+    }
 
-  // Dark/Light mode toggle
-  document.getElementById("modeToggle").addEventListener("click", () => {
-    document.body.classList.toggle("light");
-  });
-
-  // Init
-  updateNav();
-  loadMyProfile();
-</script>
-
+    async function loadProfiles() {
+      const data = { action: "getProfiles" };
+      const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(data) });
+      const result = await res.json();
+      if (result.success) {
+        const container = document.getElementById("profiles");
+        container.innerHTML = "";
+        result.users.forEach(user => {
+          const card = document.createElement("div");
+          card.className = "profile-card";
+          card.innerHTML = `
+            <img src="${user.photo || ''}" alt="photo">
+            <h3>${user.name}, ${user.age}</h3>
+            <p>${user.description}</p>
+            <p>📍 ${user.location}</p>
+            <p>💬 Telegram: ${user.telegram}</p>
+            <p>📱 WhatsApp: ${user.whatsapp}</p>
+            <p>🩸 Blood: ${user.blood}, Genotype: ${user.genotype}</p>
+          `;
+          container.appendChild(card);
+        });
+      }
+    }
+  </script>
 </body>
-    </html>
+      </html>
