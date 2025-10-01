@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   }
 
   // Replace with your Apps Script URL or use an env var
-  const GAS_URL = process.env.GAS_URL || "https://script.google.com/macros/s/AKfycbyyjDVX41n36he5-KZ0Yude8NYLVllZGb0MOJ0eDDOdxQlLdesE7UjjeMG1Vw85i0zl/exec";
+  const GAS_URL = process.env.GAS_URL || "https://script.google.com/macros/s/AKfycbwxU8EaV6KxyKDhw0GiICI5EAscD-8QQXUS7BTUNYqaD200DPblJtf0GefBNr-vTePb/exec";
 
   try {
     // Forward the request to Google Apps Script
