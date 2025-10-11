@@ -8,11 +8,16 @@
   <!-- PWA manifest -->
   <link rel="manifest" href="manifest.json">
 
+  <!-- Styles -->
   <link rel="stylesheet" href="styles.css">
+
+  <!-- Firebase (modular imports) -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js"></script>
 </head>
 <body>
 
-  <!-- Initial loading screen -->
+  <!-- LOADING SCREEN -->
   <div id="initialLoading">
     <img src="img/login.png" alt="TapMeet Loading">
     <div class="progress-bar">
@@ -20,62 +25,67 @@
     </div>
   </div>
 
+  <!-- HEADER -->
   <header>
     <div class="top">
       <div class="logo"><img src="img/logo.png" alt="TapMeet Logo"></div>
       <h1 onclick="showPage('home')">TapMeet</h1>
-
       <div class="controls">
         <button class="icon-btn" id="installBtn" title="Install TapMeet" style="display:none">
           <img src="https://cdn-icons-png.flaticon.com/512/545/545665.png" alt="install">
-          <div style="font-size:11px;color:rgba(255,255,255,0.85)">Install</div>
+          <div class="btn-text">Install</div>
         </button>
 
         <button class="icon-btn" id="toggleModeBtn" title="Toggle mode">
           <img src="https://cdn-icons-png.flaticon.com/512/869/869869.png" alt="mode">
-          <div style="font-size:11px;color:rgba(255,255,255,0.85)">Mode</div>
+          <div class="btn-text">Mode</div>
         </button>
       </div>
     </div>
   </header>
 
+  <!-- NAVBAR -->
   <nav class="main">
     <div class="nav-left">
       <button class="nav-btn active" id="nav_home">
         <img src="https://cdn-icons-png.flaticon.com/512/1946/1946488.png" alt="home">
-        <div style="font-size:11px">Home</div>
+        <div>Home</div>
       </button>
 
       <button class="nav-btn" id="nav_signup">
         <img src="https://cdn-icons-png.flaticon.com/512/1828/1828961.png" alt="signup">
-        <div style="font-size:11px">Signup</div>
+        <div>Signup</div>
       </button>
 
       <button class="nav-btn" id="nav_login">
         <img src="https://cdn-icons-png.flaticon.com/512/295/295128.png" alt="login">
-        <div style="font-size:11px">Login</div>
+        <div>Login</div>
       </button>
 
       <button class="nav-btn" id="nav_explore">
         <img src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png" alt="explore">
-        <div style="font-size:11px">Explore</div>
+        <div>Explore</div>
       </button>
     </div>
 
-    <div style="display:flex; gap:8px; align-items:center;">
-      <div style="font-size:12px; color:var(--muted)">TapMeet • <a href="mailto:s.tapmeet@gmail.com" style="color:var(--muted);text-decoration:none;">s.tapmeet@gmail.com</a></div>
+    <div class="footer-info">
+      <div>TapMeet • <a href="mailto:s.tapmeet@gmail.com">s.tapmeet@gmail.com</a></div>
     </div>
   </nav>
 
+  <!-- MAIN CONTAINER -->
   <div class="container">
 
-    <!-- HOME -->
+    <!-- HOME PAGE -->
     <section id="home" class="page active">
       <div class="card">
         <h2>Welcome to TapMeet</h2>
-        <p class="small-muted">Find people near you. Please follow safety advice — never send money on first dates or meets. For support, please contact <a href="mailto:s.tapmeet@gmail.com">s.tapmeet@gmail.com</a>.</p>
+        <p class="small-muted">
+          Find people near you. Never send money on first meets.  
+          For help, contact <a href="mailto:s.tapmeet@gmail.com">s.tapmeet@gmail.com</a>.
+        </p>
 
-        <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;">
+        <div class="home-btns">
           <button class="icon-btn" id="home_signup_btn">
             <img src="https://cdn-icons-png.flaticon.com/512/706/706164.png" alt="">
             <div>Join</div>
@@ -92,85 +102,79 @@
       </div>
     </section>
 
-    <!-- SIGNUP -->
+    <!-- SIGNUP PAGE -->
     <section id="signup" class="page">
       <div class="card">
-        <h2>Create an account</h2>
+        <h2>Create an Account</h2>
 
-        <div class="row" style="margin-top:8px">
+        <div class="row">
           <div class="col">
             <label>Full name</label>
             <input id="su_name" type="text" placeholder="Jane Doe">
           </div>
           <div class="col">
             <label>Age</label>
-            <input id="su_age" type="number" placeholder="e.g. 28">
+            <input id="su_age" type="number" placeholder="28">
           </div>
         </div>
 
         <div class="row">
           <div class="col">
-            <label>Height (ft/in)</label>
-            <input id="su_height" type="text" placeholder="e.g. 5'8 ft">
+            <label>Height</label>
+            <input id="su_height" type="text" placeholder="5'8 ft">
           </div>
           <div class="col">
-            <label>Genotype (hint)</label>
-            <input id="su_genotype" type="text" placeholder="AA, AS, SS, etc.">
+            <label>Genotype</label>
+            <input id="su_genotype" type="text" placeholder="AA, AS, etc.">
           </div>
         </div>
 
-        <label>Blood (stored as 'blood' in backend; shows as Genotype in UI)</label>
+        <label>Blood Type</label>
         <input id="su_blood" type="text" placeholder="A+, O-, etc.">
 
-        <label>Location (city, details)</label>
+        <label>Location</label>
         <input id="su_location" type="text" placeholder="Lagos, Nigeria">
 
         <label>Description</label>
-        <textarea id="su_desc" placeholder="Tell people a little about yourself"></textarea>
+        <textarea id="su_desc" placeholder="Tell people about yourself"></textarea>
 
-        <label>Telegram ID (e.g. @dechris)</label>
+        <label>Telegram ID</label>
         <input id="su_telegram" type="text" placeholder="@username">
 
-        <label>WhatsApp or Email (public contact)</label>
+        <label>WhatsApp or Email</label>
         <input id="su_whatsapp" type="text" placeholder="+234... or email">
 
-        <div style="display:flex; gap:8px; margin-top:8px;">
-          <div style="flex:1">
-            <label>Email (login)</label>
+        <div class="row">
+          <div class="col">
+            <label>Email</label>
             <input id="su_email" type="email" placeholder="you@example.com">
           </div>
-          <div style="flex:1">
+          <div class="col">
             <label>Password</label>
-            <input id="su_password" type="password" placeholder="choose a password">
+            <input id="su_password" type="password" placeholder="password">
           </div>
         </div>
 
-        <label>Profile photo URL</label>
+        <label>Profile Photo URL</label>
         <input id="su_photo_url" type="url" placeholder="https://example.com/image.jpg">
-        <div class="hint">Need help getting an image URL? Watch the tutorial below.</div>
+        <div class="hint">Need help getting an image URL? Watch tutorial below.</div>
 
-        <div style="display:flex; gap:8px; margin-top:12px;">
-          <label style="display:flex; align-items:center; gap:8px;">
-            <input id="agree_warn" type="checkbox"> I understand safety warnings.
-          </label>
-        </div>
+        <label><input id="agree_warn" type="checkbox"> I understand safety warnings.</label>
 
-        <div style="display:flex; gap:8px; margin-top:12px;">
-          <button id="signupBtn" class="primary">Create account</button>
+        <div class="action-btns">
+          <button id="signupBtn" class="primary">Create Account</button>
           <button id="clearSignupBtn" class="secondary">Clear</button>
         </div>
 
         <div id="signup_feedback" class="hint"></div>
 
         <div class="video-container">
-          <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
         </div>
-
-        <div class="small-muted" style="margin-top:12px;">For assistance, contact <a href="mailto:s.tapmeet@gmail.com">s.tapmeet@gmail.com</a>.</div>
       </div>
     </section>
 
-    <!-- LOGIN -->
+    <!-- LOGIN PAGE -->
     <section id="login" class="page">
       <div class="card">
         <h2>Login</h2>
@@ -181,61 +185,46 @@
         <label>Password</label>
         <input id="li_password" type="password">
 
-        <div style="display:flex; gap:10px; align-items:center; margin-top:8px;">
-          <label style="display:flex; align-items:center; gap:8px;">
-            <input id="remember_me" type="checkbox"> Remember me
-          </label>
-          <div style="flex:1"></div>
+        <div class="remember">
+          <label><input id="remember_me" type="checkbox"> Remember me</label>
           <button id="prefillBtn" class="secondary">Fill</button>
         </div>
 
-        <div style="display:flex; gap:8px; margin-top:12px;">
-          <button id="loginBtn" class="primary">Sign in</button>
-        </div>
-
+        <button id="loginBtn" class="primary">Sign In</button>
         <div id="login_feedback" class="hint"></div>
-        <div class="small-muted" style="margin-top:12px;">Forgot password? Contact <a href="mailto:s.tapmeet@gmail.com">s.tapmeet@gmail.com</a>.</div>
       </div>
     </section>
 
-    <!-- EXPLORE -->
+    <!-- EXPLORE PAGE -->
     <section id="explore" class="page">
       <div class="card">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div class="explore-header">
           <h2>Explore</h2>
-          <div style="display:flex; gap:8px; align-items:center;">
-            <button class="tab active" id="tab_ne">
-              <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" style="width:18px;height:18px;filter:invert(100%)">
-              Near me
-            </button>
-            <button class="tab" id="tab_al">
-              <img src="https://cdn-icons-png.flaticon.com/512/709/709496.png" style="width:18px;height:18px;filter:invert(100%)">
-              Show all
-            </button>
+          <div class="tabs">
+            <button class="tab active" id="tab_ne">Near me</button>
+            <button class="tab" id="tab_al">Show all</button>
           </div>
         </div>
 
-        <div style="margin-top:8px;">
-          <div class="small-muted">Tip: Tap a profile to view details. Contact info only available when logged in. For support, contact <a href="mailto:s.tapmeet@gmail.com">s.tapmeet@gmail.com</a>.</div>
-        </div>
-
-        <div id="profiles_container" style="margin-top:12px;">
-          <div class="profiles" id="profiles"></div>
+        <div class="small-muted">Tap a profile to view details.</div>
+        <div id="profiles_container">
+          <div id="profiles" class="profiles"></div>
         </div>
       </div>
     </section>
 
   </div>
 
-  <!-- Loading popup -->
+  <!-- LOADING POPUP -->
   <div id="loadingPopup" aria-hidden="true">
     <div class="loader-card">
-      <div class="spinner" aria-hidden="true"></div>
+      <div class="spinner"></div>
       <div id="loadingText" class="small-muted">Processing...</div>
-      <div id="loadingSub" class="small-muted" style="font-size:12px">Please wait — this should only take a few seconds.</div>
+      <div id="loadingSub" class="small-muted">Please wait — this should only take a few seconds.</div>
     </div>
   </div>
 
+  <!-- Script -->
   <script src="script.js" defer></script>
 </body>
 </html>
